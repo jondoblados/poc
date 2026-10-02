@@ -1,0 +1,10 @@
+{{ define "main" }}
+<section class="hero">
+  <h1>Manchester Business School Alumni Association of Singapore</h1>
+  <p>This is a proof of concept. Every post below was written in Google Docs and published automatically.</p>
+</section>
+<h2>Latest news &amp; events</h2>
+<div class="grid">
+  {{ range first 12 (where site.RegularPages "Section" "posts") }}{{ partial "card.html" . }}{{ else }}<p>No posts yet. Move a Doc into LIVE &gt; Posts.</p>{{ end }}
+</div>
+{{ end }}

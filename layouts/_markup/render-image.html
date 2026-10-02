@@ -1,0 +1,7 @@
+{{- $src := .Destination -}}
+{{- with .PageInner.Resources.Get .Destination -}}
+  {{- $img := . -}}{{- if gt .Width 1200 }}{{ $img = .Resize "1200x webp" }}{{ else }}{{ $img = .Process "webp" }}{{ end -}}
+  <img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="{{ $.Text }}" loading="lazy">
+{{- else -}}
+  <img src="{{ $src | safeURL }}" alt="{{ .Text }}" loading="lazy">
+{{- end -}}

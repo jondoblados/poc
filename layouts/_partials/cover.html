@@ -1,0 +1,6 @@
+{{- /* Returns the processed cover image (WebP, max 1200px wide) or nothing. */ -}}
+{{- $img := .Resources.GetMatch "cover.*" -}}
+{{- with $img -}}
+  {{- if gt .Width 1200 -}}{{- $img = .Resize "1200x webp" -}}{{- else -}}{{- $img = .Process "webp" -}}{{- end -}}
+{{- end -}}
+{{- return $img -}}

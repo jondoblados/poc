@@ -1,0 +1,17 @@
+{{ define "main" }}
+<article class="post">
+  {{ if eq .Section "posts" }}<p class="meta">{{ range .Params.categories }}<span class="tag">{{ . }}</span>{{ end }} {{ .Date.Format "Monday, 2 January 2006" }}</p>{{ end }}
+  <h1>{{ .Title }}</h1>
+  {{ with .Params.eventDate }}<p class="event"><strong>When:</strong> {{ . }}</p>{{ end }}
+  {{ with partial "cover.html" . }}<img class="cover" src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="{{ $.Title }}">{{ end }}
+  <div class="content">{{ .Content }}</div>
+  {{ with .Params.signup }}<p><a class="button" href="{{ . }}" rel="noopener">Sign up</a></p>{{ end }}
+  {{ if eq .Section "posts" }}
+  <div class="share">
+    <span>Share:</span>
+    <a href="https://www.facebook.com/sharer/sharer.php?u={{ .Permalink | urlquery }}" rel="noopener" target="_blank">Facebook</a>
+    <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ .Permalink | urlquery }}" rel="noopener" target="_blank">LinkedIn</a>
+  </div>
+  {{ end }}
+</article>
+{{ end }}

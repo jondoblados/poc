@@ -1,0 +1,148 @@
+name: Publish from Google Drive
+
+# Google Docs in the LIVE Drive folder -> Hugo -> GitHub Pages (https://jon.doblados.net/poc/)
+on:
+  schedule:
+    - cron: "*/15 0-15 * * *"   # every 15 min, 08:00-23:59 SGT (cron is UTC)
+    - cron: "5 16 * * *"        # 00:05 SGT daily: always rebuild so future-dated posts go live
+  workflow_dispatch:            # "Run workflow" button = publish now
+  push:
+    branches: [main]
+    paths: ["layouts/**", "assets/**", "static/**", "hugo.toml", "scripts/**", ".github/workflows/**"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  HUGO_VERSION: "0.167.0"
+  SITE_URL: "https://jon.doblados.net/poc/"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # commit generated content (audit trail + rollback)
+      id-token: write   # OIDC token for Google Workload Identity Federation
+    outputs:
+      deploy: ${{ steps.decide.outputs.deploy }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - id: auth
+        name: Authenticate to Google (Workload Identity Federation, no stored keys)
+        if: vars.GCP_WIF_PROVIDER != ''
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/drive
+          access_token_lifetime: 600s
+          create_credentials_file: false
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+
+      - id: sync
+        name: Convert Google Docs in LIVE to Hugo content
+        if: vars.GCP_WIF_PROVIDER != ''
+        env:
+          GOOGLE_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+          LIVE_FOLDER_ID: ${{ vars.LIVE_FOLDER_ID }}
+        run: python scripts/drive_to_hugo.py build
+
+      - name: Commit generated content
+        if: steps.sync.outcome == 'success'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A content data
+          git diff --cached --quiet || git commit -m "Publish from Google Drive ($(date -u +%Y-%m-%dT%H:%MZ))"
+          git push
+
+      - id: decide
+        name: Decide whether to deploy
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ] || [ "${{ steps.sync.outputs.changed }}" = "true" ] || [ "${{ github.event.schedule }}" = "5 16 * * *" ]; then
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "deploy=false" >> "$GITHUB_OUTPUT"; echo "No changes in Drive - skipping deploy."
+          fi
+
+      - name: Install Hugo
+        if: steps.decide.outputs.deploy == 'true'
+        run: |
+          curl -sSLo hugo.tar.gz "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"
+          tar -xzf hugo.tar.gz hugo && sudo mv hugo /usr/local/bin/ && hugo version
+
+      - name: Build site
+        if: steps.decide.outputs.deploy == 'true'
+        env:
+          TZ: Asia/Singapore
+        run: hugo --minify --gc --baseURL "$SITE_URL"
+
+      - name: Upload Pages artifact
+        if: steps.decide.outputs.deploy == 'true'
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: public
+
+      - name: Keep publish report for the notify job
+        if: steps.sync.outcome == 'success'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: publish-report
+          path: .publish/report.json
+          include-hidden-files: true
+          retention-days: 7
+
+  deploy:
+    needs: build
+    if: needs.build.outputs.deploy == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+
+  notify:
+    # Comment on each Doc: "Published: <link>" or "Could not publish: <reasons>"
+    needs: [build, deploy]
+    if: always() && vars.GCP_WIF_PROVIDER != '' && needs.build.result == 'success' && needs.deploy.result != 'failure'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - id: report
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        continue-on-error: true
+        with:
+          name: publish-report
+          path: .publish
+      - id: auth
+        if: steps.report.outcome == 'success'
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/drive
+          access_token_lifetime: 300s
+          create_credentials_file: false
+      - name: Comment on Google Docs
+        if: steps.report.outcome == 'success'
+        env:
+          GOOGLE_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+        run: python3 scripts/drive_to_hugo.py comment

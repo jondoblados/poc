@@ -1,0 +1,10 @@
+<article class="card">
+  <a href="{{ .RelPermalink }}">
+    {{ with partial "cover.html" . }}{{ $thumb := .Fill "600x400 Center webp" }}<img src="{{ $thumb.RelPermalink }}" width="{{ $thumb.Width }}" height="{{ $thumb.Height }}" alt="" loading="lazy">{{ end }}
+    <div class="card-body">
+      <p class="meta">{{ range .Params.categories }}<span class="tag">{{ . }}</span>{{ end }} {{ .Date.Format "2 Jan 2006" }}</p>
+      <h3>{{ .Title }}</h3>
+      <p>{{ .Description }}</p>
+    </div>
+  </a>
+</article>
