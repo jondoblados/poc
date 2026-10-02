@@ -11,12 +11,6 @@ MBSAAS connects alumni of Alliance Manchester Business School living and working
 
 This page is a POC sample: it lives in the LIVE drive under Pages.
 
-
-
-
-
-
-
 ## **About AMBSAAS**
 
 Established in November 2003, The Alliance Manchester Business School Alumni Association of Singapore (AMBSAAS) is one of only 2 alumni associations in the world formed specifically for MBS alumnus. All subsequent alumni associations formed after us in their respective localities are UOM alumni associations.
@@ -33,11 +27,11 @@ As our AMBS alumni progresses in their careers, they continue to bring good repu
 
 The value of our MBA is not just the knowledge and insights gained but also, the camaraderie formed during our studies and across batches of alumni that went before us, and those to come. We warmly welcome you to actively participate in AMBSAAS activities whenever you can and tap into the Manchester Network.A
 
-####
-
 #### **Founding President**
 
 Wayne Soo
+
+![](image101.jpg)
 
 Wayne Soo is the Founding President of The Alliance Manchester Business School Alumni Association of Singapore (AMBSAAS) in 2003\. After serving 3 terms as Honorary President, Wayne has been the Emeritus President of AMBSAAS since 2020\.
 
@@ -47,18 +41,16 @@ According to the Singapore Business Review, the firm is the 23rd largest account
 
 In his free time, Wayne provides mentorship to start-ups and students of the AMBS MBA programme.
 
-
-
 ### **Meet the Council Members**
 
-
+![](image1.png)
 [**Teo Teck Loon**](https://mbsaas.org/team/teo-teck-loon/)
 Honorary President
 
 ![](image2.png)
 [**Nicole Tretwer**](https://mbsaas.org/team/nicole-tretwer/)
 Honorary Treasurer
-										![](image3.png)
+![](image3.png)
 [**Lesley Ngai**](https://mbsaas.org/team/lesley-ngai/)
 Honorary Member
 
