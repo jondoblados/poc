@@ -1,5 +1,6 @@
 ---
-title: "News & Events"
-menus: main
-weight: 10
+title: "News"
+menus:
+  main:
+    weight: 90
 ---

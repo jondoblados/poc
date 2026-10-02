@@ -1,7 +1,9 @@
 ---
 title: "About MBSAAS"
-menus: main
 weight: 1
+menus:
+  main:
+    weight: 1
 description: "The Manchester Business School Alumni Association of Singapore."
 driveId: "1fQG8gFj7rSeOmaGqMtrWhX410HE_rR7eU0z1pButizU"
 ---
@@ -44,24 +46,24 @@ In his free time, Wayne provides mentorship to start-ups and students of the AMB
 ### **Meet the Council Members**
 
 ![](image1.png)\
-[**Teo Teck Loon**](https://mbsaas.org/team/teo-teck-loon/)\
+[**Teo Teck Loon**](https://jon.doblados.net/poc/team/teo-teck-loon/)\
 Honorary President
 
 ![](image2.png)\
-[**Nicole Tretwer**](https://mbsaas.org/team/nicole-tretwer/)\
+[**Nicole Tretwer**](https://jon.doblados.net/poc/team/nicole-tretwer/)\
 Honorary Treasurer\
 ![](image3.png)\
-[**Lesley Ngai**](https://mbsaas.org/team/lesley-ngai/)\
+[**Lesley Ngai**](https://jon.doblados.net/poc/team/lesley-ngai/)\
 Honorary Member
 
 ![](image4.png)\
-[**Lester Teo**](https://mbsaas.org/team/lester-teo/)\
+[**Lester Teo**](https://jon.doblados.net/poc/team/lester-teo/)\
 Honorary Member
 
 ![](image5.png)\
-[**Andrea Teo**](https://mbsaas.org/team/andrea-teo/)\
+[**Andrea Teo**](https://jon.doblados.net/poc/team/andrea-teo/)\
 Honorary Member
 
 ![](image6.png)\
-[**Desmond Heng**](https://mbsaas.org/team/desmond-heng/)\
+[**Desmond Heng**](https://jon.doblados.net/poc/team/desmond-heng/)\
 Honorary Secretary

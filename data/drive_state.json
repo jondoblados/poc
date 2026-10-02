@@ -1,29 +1,175 @@
 {
+ "13TuY-ZGYVP15cWON82lYAmEq58h7xi0ayofr9L8bsr0": {
+  "date": null,
+  "hash": "fd575e23e560b8af55fe8c9da72e769a5b41e7bca6aae0e7ca20545a459e2b63",
+  "kind": "page",
+  "landing": false,
+  "name": "Teo Teck Loon",
+  "path": "team/teo-teck-loon",
+  "slug": "teo-teck-loon",
+  "url": "https://jon.doblados.net/poc/team/teo-teck-loon/"
+ },
+ "1CXrY38Ucs1KE39UKC39IBH_WoZGTpm0VUB654z_JD1k": {
+  "date": null,
+  "hash": "100412a7e5de12f643bd525b2863921c19953113a68ed350932c9942b93a30a3",
+  "kind": "page",
+  "landing": false,
+  "name": "Contact Us",
+  "path": "contact-us",
+  "slug": "contact-us",
+  "url": "https://jon.doblados.net/poc/contact-us/"
+ },
+ "1Fp7meii1sOLFIppRSlw1liqwJ_VyR5Thc08x_V6GKKE": {
+  "date": null,
+  "hash": "998d95f2bca330caf24878fa278bb5511f577d07cc977dd25d135da61b3339ab",
+  "kind": "page",
+  "landing": false,
+  "name": "Signature Events",
+  "path": "events/signature-events",
+  "slug": "signature-events",
+  "url": "https://jon.doblados.net/poc/events/signature-events/"
+ },
  "1GhUf9ma_2W2CoCDy0UktCjvMO5M6yby1pJEuRtkCCOo": {
   "date": "2026-10-02",
-  "hash": "48ff538421be29eafb65a511d48d267a65ac11031d717ff88fef0bbcc2ba0306",
+  "hash": "825802832d7852ca75f1479ced9f19bc8832cddb6b1721d2d5fcd628d5900abe",
   "kind": "post",
+  "landing": false,
   "name": "2026-10-30 Alumni Networking Night",
+  "path": "posts/alumni-networking-night",
   "slug": "alumni-networking-night",
   "url": "https://jon.doblados.net/poc/posts/alumni-networking-night/"
  },
+ "1KH5oxGKwKVgeh68zAxzkLr7nukPEUrX7tSO5VJLaDEc": {
+  "date": null,
+  "hash": "df4a2be7baeae4ad5ede53da2e29d7f94d78037564445d829acc9ea8610124cf",
+  "kind": "page",
+  "landing": false,
+  "name": "Lester Teo",
+  "path": "team/lester-teo",
+  "slug": "lester-teo",
+  "url": "https://jon.doblados.net/poc/team/lester-teo/"
+ },
+ "1Lcs6zp3JX0ADNMspUNeEZiilLLJDCH0wOzDcZ6yWDds": {
+  "date": null,
+  "hash": "05081644b38d978cdb119e025bb1a4428de755aa49bef797259508e0bcbe34ce",
+  "kind": "page",
+  "landing": false,
+  "name": "Nicole Tretwer",
+  "path": "team/nicole-tretwer",
+  "slug": "nicole-tretwer",
+  "url": "https://jon.doblados.net/poc/team/nicole-tretwer/"
+ },
+ "1T0Pq69N3--fhb6sYKrCsVg1eMn9WAkrAxMnskZZXegI": {
+  "date": null,
+  "hash": "dca61b0b0770f3647e5d9899a46144c82ccd69ee23c18265a322c2f186c53f3e",
+  "kind": "page",
+  "landing": true,
+  "name": "Resources",
+  "path": "resources",
+  "slug": "resources",
+  "url": "https://jon.doblados.net/poc/resources/"
+ },
+ "1TRTYWIKI9aOshrxU-KanlGCndBYhlVZwef3YGXz3UMU": {
+  "date": null,
+  "hash": "d80415d23bec81caf71e4762ec2b88cf64f5639712dd1573ff6ad455ab80c250",
+  "kind": "page",
+  "landing": false,
+  "name": "Student Mentoring",
+  "path": "resources/student-mentoring",
+  "slug": "student-mentoring",
+  "url": "https://jon.doblados.net/poc/resources/student-mentoring/"
+ },
+ "1biAnSpTyhVafbiIvdWWX1xXXa0KepIw97jBxhj_RUt8": {
+  "date": null,
+  "hash": "26bfb571c4c324b9754fedced4683bc9ebf2eab8f8a7d59dcf3a19f57cedc1b8",
+  "kind": "page",
+  "landing": false,
+  "name": "Community Events",
+  "path": "events/community-events",
+  "slug": "community-events",
+  "url": "https://jon.doblados.net/poc/events/community-events/"
+ },
+ "1ceoZjA1ZtmyrmszzyfgVoK7sU8uR30f3bzT5BRq4yPE": {
+  "date": null,
+  "hash": "c5603debd3d1cd6102b7da17e4c466e898ac95c274286da68c094330e266f9fe",
+  "kind": "page",
+  "landing": false,
+  "name": "Andrea Teo",
+  "path": "team/andrea-teo",
+  "slug": "andrea-teo",
+  "url": "https://jon.doblados.net/poc/team/andrea-teo/"
+ },
  "1fQG8gFj7rSeOmaGqMtrWhX410HE_rR7eU0z1pButizU": {
   "date": null,
-  "hash": "a220389893a13d28998ad089ae32f074830f870a0e03ecf5814db87eed0b20f7",
+  "hash": "8eea6761db331a387116168e7e4b2fc2d7ca5e0e8fb706969c6b208dae992b8e",
   "kind": "page",
+  "landing": false,
   "name": "About",
+  "path": "about-mbsaas",
   "slug": "about-mbsaas",
   "url": "https://jon.doblados.net/poc/about-mbsaas/",
   "warnings": [
    "1 image(s) were set to \"Wrap text\" (or similar) and have been placed above the paragraph they were attached to. For exact placement, click the image and choose \"In line\" in the toolbar."
   ]
  },
+ "1ok1KXJuR_1RNqL3RpEYGOKGHWYSS7hP3tcYQEpKU6Vs": {
+  "date": null,
+  "hash": "8689456beb142fb891e322bb4bf4ff38887abf59db34407873c34fe714e8f5b7",
+  "kind": "page",
+  "landing": false,
+  "name": "Lesley Ngai",
+  "path": "team/lesley-ngai",
+  "slug": "lesley-ngai",
+  "url": "https://jon.doblados.net/poc/team/lesley-ngai/"
+ },
+ "1rDWZ3n0V4rMHVWHKdfXRvcvIO-tWQKoN5yi3a0SvQg0": {
+  "date": null,
+  "hash": "fa077a65da4cf40b87c3bad63abf9a6cea013bf48fef790f6dd802b4d1dfb970",
+  "kind": "page",
+  "landing": false,
+  "name": "Professional Services",
+  "path": "resources/professional-services",
+  "slug": "professional-services",
+  "url": "https://jon.doblados.net/poc/resources/professional-services/"
+ },
  "1rmuiSpEiiXEErOfIj7TmtVLx7TUmHPIqRyRaO9uJntE": {
   "date": "2026-10-02",
-  "hash": "db65f1d09618ca948d5b6b7c592bc6a50024ed032b943fb753884324da381e51",
+  "hash": "e63c6f3993dff222627cc169878f83ee2836ead8aab105ffd0cd6b561f5983c7",
   "kind": "post",
+  "landing": false,
   "name": "2026-10-02 Manchester Day of Action",
+  "path": "posts/manchester-day-of-action-2026",
   "slug": "manchester-day-of-action-2026",
   "url": "https://jon.doblados.net/poc/posts/manchester-day-of-action-2026/"
+ },
+ "1u0kJoYTTqxPGK3Hw3gqT8H3IkdG7eBFrmdEihPHGf5o": {
+  "date": null,
+  "hash": "5122577d2d863b4005f440e30f8e5d0fccd8e2b8d0676d6fa92bece220d3038e",
+  "kind": "page",
+  "landing": false,
+  "name": "Membership",
+  "path": "membership",
+  "slug": "membership",
+  "url": "https://jon.doblados.net/poc/membership/"
+ },
+ "1vp-rNXphUx60Svqo3Iqz2uEKI3o0vU4KxHy9XuanDNA": {
+  "date": null,
+  "hash": "68896118107b229e9b850d7537466efa8d4300a6a22db3e1852ef407749b0e93",
+  "kind": "page",
+  "landing": true,
+  "name": "Events",
+  "path": "events",
+  "slug": "events",
+  "url": "https://jon.doblados.net/poc/events/"
+ },
+ "1yITs_7LVs2bY1Mj2V6AVF1FUqdJYw8UeYGuRcgnXB2M": {
+  "date": null,
+  "hash": "eb14e3d8edbb678e184128445a8ec88b3119801e5e297160cfb0c997c9c06354",
+  "kind": "page",
+  "landing": false,
+  "name": "Desmond Heng",
+  "path": "team/desmond-heng",
+  "slug": "desmond-heng",
+  "url": "https://jon.doblados.net/poc/team/desmond-heng/"
  }
 }
