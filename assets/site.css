@@ -11,7 +11,7 @@ nav a{color:#fff;text-decoration:none;margin-left:18px}nav a:hover{color:var(--g
 h2{margin-top:32px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin:16px 0 40px}
 .card{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.card a{text-decoration:none;color:inherit;display:block}.card img{width:100%;height:auto;display:block}
+.card a{text-decoration:none;color:inherit;display:block}.card img{width:100%;height:auto;display:block;aspect-ratio:4/5;object-fit:contain;background:#e9e7e1}
 .card-body{padding:14px 16px 18px}.card h3{margin:4px 0 6px;color:var(--navy);line-height:1.3}.card p{margin:0;color:var(--muted)}
 .meta{font-size:.85rem;color:var(--muted)}.tag{background:var(--gold);color:var(--navy);font-weight:600;padding:2px 8px;border-radius:99px;margin-right:6px}
 .post{max-width:720px;margin:32px auto 48px}.post h1{color:var(--navy);line-height:1.2;margin:8px 0}
