@@ -101,13 +101,13 @@
  },
  "1fQG8gFj7rSeOmaGqMtrWhX410HE_rR7eU0z1pButizU": {
   "date": null,
-  "hash": "8eea6761db331a387116168e7e4b2fc2d7ca5e0e8fb706969c6b208dae992b8e",
+  "hash": "4094a1c3c19cff28f6207ee631a3760aa6059ff32758e58dcd9eb4c324866bcd",
   "kind": "page",
   "landing": false,
   "name": "About",
-  "path": "about-mbsaas",
-  "slug": "about-mbsaas",
-  "url": "https://jon.doblados.net/poc/about-mbsaas/",
+  "path": "about-ambsaas",
+  "slug": "about-ambsaas",
+  "url": "https://jon.doblados.net/poc/about-ambsaas/",
   "warnings": [
    "1 image(s) were set to \"Wrap text\" (or similar) and have been placed above the paragraph they were attached to. For exact placement, click the image and choose \"In line\" in the toolbar."
   ]
