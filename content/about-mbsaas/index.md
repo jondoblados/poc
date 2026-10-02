@@ -43,25 +43,25 @@ In his free time, Wayne provides mentorship to start-ups and students of the AMB
 
 ### **Meet the Council Members**
 
-![](image1.png)
-[**Teo Teck Loon**](https://mbsaas.org/team/teo-teck-loon/)
+![](image1.png)\
+[**Teo Teck Loon**](https://mbsaas.org/team/teo-teck-loon/)\
 Honorary President
 
-![](image2.png)
-[**Nicole Tretwer**](https://mbsaas.org/team/nicole-tretwer/)
-Honorary Treasurer
-![](image3.png)
-[**Lesley Ngai**](https://mbsaas.org/team/lesley-ngai/)
+![](image2.png)\
+[**Nicole Tretwer**](https://mbsaas.org/team/nicole-tretwer/)\
+Honorary Treasurer\
+![](image3.png)\
+[**Lesley Ngai**](https://mbsaas.org/team/lesley-ngai/)\
 Honorary Member
 
-![](image4.png)
-[**Lester Teo**](https://mbsaas.org/team/lester-teo/)
+![](image4.png)\
+[**Lester Teo**](https://mbsaas.org/team/lester-teo/)\
 Honorary Member
 
-![](image5.png)
-[**Andrea Teo**](https://mbsaas.org/team/andrea-teo/)
+![](image5.png)\
+[**Andrea Teo**](https://mbsaas.org/team/andrea-teo/)\
 Honorary Member
 
-![](image6.png)
-[**Desmond Heng**](https://mbsaas.org/team/desmond-heng/)
+![](image6.png)\
+[**Desmond Heng**](https://mbsaas.org/team/desmond-heng/)\
 Honorary Secretary
