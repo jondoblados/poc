@@ -1,13 +1,13 @@
 baseURL = "https://jon.doblados.net/poc/"
 locale = "en-SG"
-title = "MBSAAS (POC)"
+title = "AMBSAAS (POC)"
 enableRobotsTXT = true
 # Future-dated posts stay hidden until their Publish date (the daily run picks them up).
 buildFuture = false
 timeZone = "Asia/Singapore"
 
 [params]
-  description = "Manchester Business School Alumni Association of Singapore - website POC (Google Docs -> Hugo -> GitHub Pages)"
+  description = "Alliance Manchester Business School Alumni Association of Singapore - website POC (Google Docs -> Hugo -> GitHub Pages)"
 
 [markup.goldmark.renderer]
   # Never render raw HTML/scripts coming from Google Docs.
