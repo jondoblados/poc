@@ -17,6 +17,13 @@ Google Drive (jon@doblados.net)
     └── MBSAAS POC Web - LIVE          what is here = what is on the site
         ├── Posts                      → /poc/posts/<slug>/
         ├── Pages                      → /poc/<slug>/   (added to the menu)
+        │   ├── Membership, Contact Us, About
+        │   ├── Resources/             a sub-folder = a menu section with a drop-down
+        │   │   ├── Resources          Doc named like the folder = the section page (/poc/resources/)
+        │   │   ├── Professional Services  → /poc/resources/professional-services/
+        │   │   └── Student Mentoring
+        │   ├── Events/  (Events, Signature Events, Community Events)
+        │   └── Team/    no "Team" Doc → section is not in the menu (profiles linked from About)
         └── Images
 
 GitHub Actions (.github/workflows/publish.yml)
@@ -96,6 +103,17 @@ hugo server                                   # preview committed content
 DRIVE_BACKEND=gws LIVE_FOLDER_ID=... python3 scripts/drive_to_hugo.py build
 GOOGLE_ACCESS_TOKEN=$(gcloud auth print-access-token) LIVE_FOLDER_ID=... python3 scripts/drive_to_hugo.py build
 ```
+
+## Page table fields
+
+| Field | Used for |
+|---|---|
+| Title | Page title, menu label and web address |
+| Menu order | Position in the menu (1 = first) |
+| Show in menu | `No` hides the page from the menu |
+| Short summary | Search/social description and the card text on section pages |
+
+Links to the old site (`https://mbsaas.org/...`) are rewritten automatically to the matching new page.
 
 ## Security notes
 

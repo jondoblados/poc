@@ -1,5 +1,19 @@
 {{ define "main" }}
+{{ if eq .Section "posts" }}
 <h1>{{ .Title }}</h1>
 {{ .Content }}
 <div class="grid">{{ range .Pages }}{{ partial "card.html" . }}{{ end }}</div>
+{{ else }}
+<article class="post">
+  <h1>{{ .Title }}</h1>
+  <div class="content">{{ .Content }}</div>
+  {{ with .Pages.ByWeight }}
+  <div class="subpages">
+    {{ range . }}
+    <a class="subpage" href="{{ .RelPermalink }}"><strong>{{ .Title }}</strong>{{ with .Description }}<span>{{ . }}</span>{{ end }}</a>
+    {{ end }}
+  </div>
+  {{ end }}
+</article>
+{{ end }}
 {{ end }}

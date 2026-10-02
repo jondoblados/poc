@@ -5,6 +5,8 @@ drive_to_hugo.py - Convert Google Docs in the LIVE Drive folder into Hugo conten
 Rule: what is in the LIVE folder is what is on the website.
   LIVE/Posts/*  -> content/posts/<slug>/index.md  (+ images)
   LIVE/Pages/*  -> content/<slug>/index.md         (+ images)
+  LIVE/Pages/<Section>/<Section>   -> content/<section>/_index.md  (menu item)
+  LIVE/Pages/<Section>/<Other Doc> -> content/<section>/<slug>/    (sub-menu item)
 
 Each Doc starts with a 2-column "Field | Value" table (see the Post Template),
 followed by the body. The first image in the Doc becomes the cover / social image.
@@ -35,7 +37,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTENT = os.path.join(ROOT, "content")
 STATE_FILE = os.path.join(ROOT, "data", "drive_state.json")
 REPORT_FILE = os.path.join(ROOT, ".publish", "report.json")
-CONVERTER_VERSION = "3"  # bump to force a republish (and fresh Doc comments) after converter changes
+CONVERTER_VERSION = "4"  # bump to force a republish (and fresh Doc comments) after converter changes
 SITE_URL = os.environ.get("SITE_URL", "https://jon.doblados.net/poc/").rstrip("/") + "/"
 
 DOC_MIME = "application/vnd.google-apps.document"
@@ -284,8 +286,13 @@ def recover_positioned_images(body, images, html_text):
     return "\n\n".join(blocks), images, recovered
 
 # --------------------------------------------------------------------------- conversion
-def convert(doc, kind, drive, used_slugs):
-    """Write one Doc as a Hugo page bundle. Returns (record, errors)."""
+def convert(doc, kind, drive, used_paths, section=None, landing=False):
+    """Write one Doc as a Hugo page bundle. Returns (record, errors).
+
+    kind     "post" or "page"
+    section  for pages inside a sub-folder of LIVE/Pages: {"slug", "title"}; None = top level
+    landing  True if this Doc is the section's own page (Doc named like the folder)
+    """
     md = drive.export_markdown(doc["id"])
     fields, body, images = parse_doc(md)
     errors, warnings = [], []
@@ -325,13 +332,23 @@ def convert(doc, kind, drive, used_slugs):
     if errors:
         return None, errors
 
-    base = slugify(fields["title"])
-    slug, n = base, 2
-    while slug in used_slugs:
-        slug, n = f"{base}-{n}", n + 1
-    used_slugs.add(slug)
-
-    bundle = os.path.join(CONTENT, "posts" if kind == "post" else "", slug)
+    # ---- where the page goes
+    if kind == "post":
+        parent = "posts"
+    else:
+        parent = section["slug"] if section else ""
+    if landing:
+        path = section["slug"]
+        bundle = os.path.join(CONTENT, path)
+        index_name = "_index.md"
+    else:
+        base = slugify(fields["title"])
+        path, n = "/".join(x for x in (parent, base) if x), 2
+        while path in used_paths:
+            path, n = "/".join(x for x in (parent, f"{base}-{n}") if x), n + 1
+        bundle = os.path.join(CONTENT, *path.split("/"))
+        index_name = "index.md"
+    used_paths.add(path)
     os.makedirs(bundle, exist_ok=True)
 
     # Posts: the first image becomes the cover (shown at the top + social preview) and is
@@ -368,23 +385,68 @@ def convert(doc, kind, drive, used_slugs):
             fm.append(f"signup: {yaml_str(fields['sign-up link'])}")
     else:
         order = fields.get("menu order", "")
-        fm.append("menus: main")
-        if order.isdigit():
-            fm.append(f"weight: {int(order)}")
+        weight = int(order) if order.isdigit() else 50
+        fm.append(f"weight: {weight}")
+        in_menu = fields.get("show in menu", "yes").strip().lower() not in ("no", "n", "false", "hide")
+        if in_menu and not (section and section.get("hidden")):
+            fm += ["menus:", "  main:", f"    weight: {weight}"]
+            if landing:
+                fm.append(f"    identifier: {yaml_str(section['slug'])}")
+            elif section:
+                fm.append(f"    parent: {yaml_str(section['slug'])}")
     if summary:
         fm.append(f"description: {yaml_str(summary)}")
     fm += [f"driveId: {yaml_str(doc['id'])}", "---", ""]
 
-    with open(os.path.join(bundle, "index.md"), "w", encoding="utf-8") as f:
+    with open(os.path.join(bundle, index_name), "w", encoding="utf-8") as f:
         f.write("\n".join(fm) + body)
 
-    url = f"{SITE_URL}{'posts/' if kind == 'post' else ''}{slug}/"
-    digest = hashlib.sha256((CONVERTER_VERSION + md).encode()).hexdigest()
-    record = {"name": doc["name"], "kind": kind, "slug": slug, "url": url,
-              "hash": digest, "date": pub_date.isoformat() if pub_date else None}
+    url = f"{SITE_URL}{path}/"
+    digest = hashlib.sha256((CONVERTER_VERSION + json.dumps(section or {}) + md).encode()).hexdigest()
+    record = {"name": doc["name"], "kind": kind, "slug": path.split("/")[-1], "path": path, "url": url,
+              "landing": landing, "hash": digest, "date": pub_date.isoformat() if pub_date else None}
     if warnings:
         record["warnings"] = warnings
     return record, []
+
+
+OLD_SITE = re.compile(r"https?://(?:www\.)?mbsaas\.org(/[^\s)\"'>]*)?")
+
+
+def rewrite_old_site_links(paths):
+    """Point links to the old WordPress site (mbsaas.org/...) at the matching new page, if any.
+
+    Matching is by the last part of the old address, e.g. /team/lester-teo/ -> team/lester-teo,
+    /resources/professional-services-2/ -> resources/professional-services, /events/signature/ ->
+    events/signature-events. Links with no match are left unchanged.
+    """
+    by_slug = {}
+    for p in paths:
+        by_slug.setdefault(p.split("/")[-1], p)
+
+    def new_url(m):
+        old = (m.group(1) or "/").split("#")[0].split("?")[0]
+        segs = [x for x in old.strip("/").split("/") if x]
+        if not segs:
+            return SITE_URL
+        seg = re.sub(r"-\d+$", "", segs[-1])
+        cand = by_slug.get(seg) or by_slug.get(segs[-1])
+        if not cand:
+            stem = "about" if seg == "about-us" else seg  # the old "About Us" page
+            pref = [s for s in by_slug if s.startswith(stem + "-")]
+            cand = by_slug[pref[0]] if len(pref) == 1 else None
+        return f"{SITE_URL}{cand}/" if cand else m.group(0)
+
+    for dirpath, _, files in os.walk(CONTENT):
+        for name in files:
+            if name.endswith(".md"):
+                fp = os.path.join(dirpath, name)
+                with open(fp, encoding="utf-8") as f:
+                    text = f.read()
+                new = OLD_SITE.sub(new_url, text)
+                if new != text:
+                    with open(fp, "w", encoding="utf-8") as f:
+                        f.write(new)
 
 
 def build():
@@ -405,43 +467,66 @@ def build():
         shutil.move(CONTENT, prev_content)
     os.makedirs(os.path.join(CONTENT, "posts"), exist_ok=True)
     with open(os.path.join(CONTENT, "posts", "_index.md"), "w") as f:
-        f.write('---\ntitle: "News & Events"\nmenus: main\nweight: 10\n---\n')
+        f.write('---\ntitle: "News"\nmenus:\n  main:\n    weight: 90\n---\n')
 
     state = {}
     if os.path.exists(STATE_FILE):
         with open(STATE_FILE) as f:
             state = json.load(f)
 
+    # Work list: (doc, kind, section, landing)
+    work = []
+    for doc in drive.list_children(subfolders["posts"]):
+        if doc["mimeType"] == DOC_MIME:
+            work.append((doc, "post", None, False))
+    if "pages" in subfolders:
+        for item in drive.list_children(subfolders["pages"]):
+            if item["mimeType"] == DOC_MIME:
+                work.append((item, "page", None, False))
+            elif item["mimeType"] == FOLDER_MIME:
+                # A sub-folder of Pages is a menu section, e.g. Pages/Resources/...
+                # The Doc named like the folder is the section page; the others go under it.
+                title = item["name"].strip()
+                section = {"slug": slugify(title), "title": title}
+                children = [d for d in drive.list_children(item["id"]) if d["mimeType"] == DOC_MIME]
+                has_landing = any(d["name"].strip().lower() == title.lower() for d in children)
+                if not has_landing:
+                    section["hidden"] = True  # no section page -> keep it out of the menu
+                    os.makedirs(os.path.join(CONTENT, section["slug"]), exist_ok=True)
+                    with open(os.path.join(CONTENT, section["slug"], "_index.md"), "w") as f:
+                        f.write(f"---\ntitle: {yaml_str(title)}\n---\n")
+                for d in children:
+                    work.append((d, "page", section, d["name"].strip().lower() == title.lower()))
+
     report = {"published": [], "errors": [], "removed": []}
     new_state, used = {}, set()
-    for kind, folder in (("post", "posts"), ("page", "pages")):
-        if folder not in subfolders:
+    # landing pages first so section folders exist before their children
+    for doc, kind, section, landing in sorted(work, key=lambda w: not w[3]):
+        prev = state.get(doc["id"], {})
+        try:
+            record, errors = convert(doc, kind, drive, used, section, landing)
+        except Exception as exc:  # keep going; one bad Doc must not block the site
+            record, errors = None, [f"Unexpected error while converting: {exc}"]
+        if errors:
+            print(f"[error] {doc['name']}: {errors}")
+            err_hash = hashlib.sha256((doc["modifiedTime"] + "".join(errors)).encode()).hexdigest()
+            new_state[doc["id"]] = {**prev, "errorHash": err_hash, "name": doc["name"]}
+            if prev.get("errorHash") != err_hash:  # comment once per change
+                report["errors"].append({"id": doc["id"], "name": doc["name"], "errors": errors})
+            old_path = prev.get("path") or (("posts/" if prev.get("kind") == "post" else "") + prev.get("slug", ""))
+            if prev.get("slug") and not prev.get("landing"):  # keep the last good version online
+                src = os.path.join(prev_content, *old_path.split("/"))
+                dst = os.path.join(CONTENT, *old_path.split("/"))
+                if os.path.isdir(src) and not os.path.exists(dst):
+                    shutil.copytree(src, dst)
+                    used.add(old_path)
             continue
-        for doc in drive.list_children(subfolders[folder]):
-            if doc["mimeType"] != DOC_MIME:
-                continue
-            prev = state.get(doc["id"], {})
-            try:
-                record, errors = convert(doc, kind, drive, used)
-            except Exception as exc:  # keep going; one bad Doc must not block the site
-                record, errors = None, [f"Unexpected error while converting: {exc}"]
-            if errors:
-                print(f"[error] {doc['name']}: {errors}")
-                err_hash = hashlib.sha256((doc["modifiedTime"] + "".join(errors)).encode()).hexdigest()
-                new_state[doc["id"]] = {**prev, "errorHash": err_hash, "name": doc["name"]}
-                if prev.get("errorHash") != err_hash:  # comment once per change
-                    report["errors"].append({"id": doc["id"], "name": doc["name"], "errors": errors})
-                if prev.get("slug"):  # keep the last good version online
-                    sub = "posts" if prev.get("kind") == "post" else ""
-                    src = os.path.join(prev_content, sub, prev["slug"])
-                    if os.path.isdir(src):
-                        shutil.copytree(src, os.path.join(CONTENT, sub, prev["slug"]))
-                        used.add(prev["slug"])
-                continue
-            print(f"[ok]    {doc['name']} -> {record['url']}")
-            new_state[doc["id"]] = record
-            if prev.get("hash") != record["hash"] or prev.get("url") != record["url"]:
-                report["published"].append({"id": doc["id"], **record})
+        print(f"[ok]    {doc['name']} -> {record['url']}")
+        new_state[doc["id"]] = record
+        if prev.get("hash") != record["hash"] or prev.get("url") != record["url"]:
+            report["published"].append({"id": doc["id"], **record})
+
+    rewrite_old_site_links(used)
 
     for doc_id, prev in state.items():
         if doc_id not in new_state and prev.get("url"):
