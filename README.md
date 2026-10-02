@@ -34,7 +34,7 @@ If the Google variables are not set (or Google is unavailable), the workflow sti
 
 ## One-time setup: Workload Identity Federation (Google Cloud)
 
-Run in [Cloud Shell](https://shell.cloud.google.com) as a project owner. Replace `PROJECT_ID`.
+Easiest: in [Cloud Shell](https://shell.cloud.google.com) run `curl -sSLO https://raw.githubusercontent.com/jondoblados/poc/main/scripts/gcp_setup.sh && bash gcp_setup.sh <EXISTING_PROJECT_ID>` (idempotent, rate-limit safe). The manual equivalent is below. Replace `PROJECT_ID`.
 
 ```bash
 PROJECT_ID="your-project-id"
