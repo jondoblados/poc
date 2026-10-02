@@ -35,7 +35,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTENT = os.path.join(ROOT, "content")
 STATE_FILE = os.path.join(ROOT, "data", "drive_state.json")
 REPORT_FILE = os.path.join(ROOT, ".publish", "report.json")
-CONVERTER_VERSION = "2"  # bump to force a republish (and fresh Doc comments) after converter changes
+CONVERTER_VERSION = "3"  # bump to force a republish (and fresh Doc comments) after converter changes
 SITE_URL = os.environ.get("SITE_URL", "https://jon.doblados.net/poc/").rstrip("/") + "/"
 
 DOC_MIME = "application/vnd.google-apps.document"
@@ -353,7 +353,11 @@ def convert(doc, kind, drive, used_slugs):
         return f"![{alt}]({ref}.{ALLOWED_IMG.get(mime, 'png')})"
 
     body = IMG_USE.sub(repl, body).strip() + "\n"
-    body = re.sub(r"[ \t]+\n", "\n", body)  # Docs adds trailing double spaces in lists
+    # Docs marks line breaks (Shift+Enter) with two trailing spaces. Keep them as hard breaks
+    # ("\\") inside a paragraph, but drop them before list items/blank lines where they add noise.
+    body = re.sub(r"[ \t]{2,}\n(?=[ \t]*(?:[-*+]|\d+\.)\s|\s*\n|\Z)", "\n", body)
+    body = re.sub(r"[ \t]{2,}\n", "\\\\\n", body)
+    body = re.sub(r"[ \t]+\n", "\n", body)
 
     fm = ["---", f"title: {yaml_str(fields['title'])}"]
     if kind == "post":
