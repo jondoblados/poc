@@ -21,6 +21,7 @@ Only the Python standard library is used, to keep maintenance simple.
 import base64
 import datetime as dt
 import hashlib
+import html.parser
 import json
 import os
 import re
@@ -34,6 +35,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTENT = os.path.join(ROOT, "content")
 STATE_FILE = os.path.join(ROOT, "data", "drive_state.json")
 REPORT_FILE = os.path.join(ROOT, ".publish", "report.json")
+CONVERTER_VERSION = "2"  # bump to force a republish (and fresh Doc comments) after converter changes
 SITE_URL = os.environ.get("SITE_URL", "https://jon.doblados.net/poc/").rstrip("/") + "/"
 
 DOC_MIME = "application/vnd.google-apps.document"
@@ -101,15 +103,18 @@ class Drive:
                 break
         return files
 
-    def export_markdown(self, file_id):
-        params = {"mimeType": "text/markdown"}
+    def export(self, file_id, mime="text/markdown"):
+        params = {"mimeType": mime}
         if self.backend == "rest":
             return self._rest("GET", f"files/{file_id}/export", params, raw=True).decode("utf-8")
-        tmp = os.path.join(".publish", f"{file_id}.md")
+        tmp = os.path.join(".publish", f"{file_id}.{'md' if 'markdown' in mime else 'html'}")
         os.makedirs(os.path.join(ROOT, ".publish"), exist_ok=True)
         self._gws(["files", "export"], {"fileId": file_id, **params}, out=tmp)
         with open(os.path.join(ROOT, tmp), encoding="utf-8") as f:
             return f.read()
+
+    def export_markdown(self, file_id):
+        return self.export(file_id, "text/markdown")
 
     def add_comment(self, file_id, text):
         params = {"fields": "id", "supportsAllDrives": True}
@@ -159,7 +164,12 @@ def parse_doc(markdown):
             if key and key != "field" and not set(key) <= set(":- "):
                 fields[key] = clean_cell("|".join(cells[1:]))
         i += 1
-    body = "\n".join(lines[i:]).strip() + "\n"
+    body = "\n".join(lines[i:])
+    # Docs exports layout tabs at line starts; in Markdown those would become code blocks
+    body = re.sub(r"(?m)^\t+", "", body)
+    body = re.sub(r"(?m)^[ \t]+$", "", body)        # whitespace-only lines
+    body = re.sub(r"(?m)^#{1,6}\s*$\n?", "", body)   # empty headings
+    body = re.sub(r"\n{3,}", "\n\n", body).strip() + "\n"
     return fields, body, images
 
 
@@ -181,12 +191,113 @@ def yaml_str(value):
     return json.dumps(value, ensure_ascii=False)  # JSON strings are valid YAML scalars
 
 
+
+# --------------------------------------------------------------------------- recovering "Wrap text" images
+# Google's Markdown export silently drops images whose layout is "Wrap text" / "Break text" /
+# "Behind/In front of text" (positioned images). The HTML export keeps them, so we use it to
+# find the missing images and put each one just above the paragraph it is anchored to.
+DATA_URI = re.compile(r"^data:(image/[a-z+]+);base64,(.+)$", re.S)
+
+
+class _HtmlImages(html.parser.HTMLParser):
+    """Collects (mime, bytes, paragraph_text) for every <img> in a Docs HTML export."""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.images, self._para_imgs, self._text, self._in_p = [], [], [], False
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "p":
+            self._flush()
+            self._in_p = True
+        elif tag == "img":
+            m = DATA_URI.match(dict(attrs).get("src", ""))
+            if m:
+                self._para_imgs.append((m.group(1), base64.b64decode(m.group(2))))
+
+    def handle_endtag(self, tag):
+        if tag == "p":
+            self._flush()
+
+    def handle_data(self, data):
+        if self._in_p:
+            self._text.append(data)
+
+    def _flush(self):
+        text = " ".join(self._text)
+        for mime, data in self._para_imgs:
+            self.images.append((mime, data, text))
+        self._para_imgs, self._text, self._in_p = [], [], False
+
+    def close(self):
+        super().close()
+        self._flush()
+
+
+def _norm(text):
+    text = MD_LINK.sub(r"\1", text)
+    text = re.sub(r"!\[[^\]]*\]\[[^\]]*\]|!\[[^\]]*\]\([^)]*\)|\[image\d+\]", " ", text)
+    return re.sub(r"[^a-z0-9]+", "", re.sub(r"\\(.)", r"\1", text).lower())[:40]
+
+
+def recover_positioned_images(body, images, html_text):
+    """Return (body, images, recovered_count). Adds images missing from the Markdown export."""
+    parser = _HtmlImages()
+    parser.feed(html_text)
+    parser.close()
+    html_imgs = parser.images
+    md_uses = IMG_USE.findall(body)
+    if len(html_imgs) <= len(md_uses):
+        return body, images, 0
+
+    blocks = body.split("\n\n")
+    block_norm = [_norm(b) for b in blocks]
+    # context of each Markdown image = normalised text of its block
+    md_ctx = []
+    for _, ref in md_uses:
+        idx = next((i for i, b in enumerate(blocks) if f"[{ref}]" in b), None)
+        md_ctx.append(block_norm[idx] if idx is not None else "")
+
+    missing, j = [], 0
+    for mime, data, text in html_imgs:
+        ctx = _norm(text)
+        if j < len(md_ctx) and ctx[:25] == md_ctx[j][:25]:
+            j += 1  # this image is already in the Markdown
+        else:
+            missing.append((mime, data, ctx))
+    missing = missing[: len(html_imgs) - len(md_uses)]
+
+    recovered, n = 0, 100
+    for mime, data, ctx in missing:
+        target = next((i for i, b in enumerate(block_norm) if ctx and b.startswith(ctx[:25])), None)
+        n += 1
+        ref = f"image{n}"
+        images[ref] = (mime, data)
+        line = f"![][{ref}]"
+        if target is None:
+            blocks.append(line)
+            block_norm.append("")
+        else:
+            blocks.insert(target, line)
+            block_norm.insert(target, "")
+        recovered += 1
+    return "\n\n".join(blocks), images, recovered
+
 # --------------------------------------------------------------------------- conversion
 def convert(doc, kind, drive, used_slugs):
     """Write one Doc as a Hugo page bundle. Returns (record, errors)."""
     md = drive.export_markdown(doc["id"])
     fields, body, images = parse_doc(md)
-    errors = []
+    errors, warnings = [], []
+    try:
+        body, images, recovered = recover_positioned_images(body, images, drive.export(doc["id"], "text/html"))
+    except Exception as exc:  # recovery is best-effort
+        recovered = 0
+        print(f"[warn]  image recovery failed for {doc['name']}: {exc}")
+    if recovered:
+        warnings.append(
+            f"{recovered} image(s) were set to \"Wrap text\" (or similar) and have been placed above the paragraph "
+            "they were attached to. For exact placement, click the image and choose \"In line\" in the toolbar.")
 
     for key in REQUIRED_POST if kind == "post" else REQUIRED_PAGE:
         if not fields.get(key):
@@ -223,9 +334,12 @@ def convert(doc, kind, drive, used_slugs):
     bundle = os.path.join(CONTENT, "posts" if kind == "post" else "", slug)
     os.makedirs(bundle, exist_ok=True)
 
-    # images: first image used becomes the cover and is removed from the body
+    # Posts: the first image becomes the cover (shown at the top + social preview) and is
+    # removed from the body. Pages: every image stays where it is in the Doc.
     uses = IMG_USE.findall(body)
-    cover_ref = uses[0][1] if uses else (sorted(images)[0] if images else None)
+    cover_ref = None
+    if kind == "post":
+        cover_ref = uses[0][1] if uses else (sorted(images)[0] if images else None)
     for ref, (mime, data) in images.items():
         name = ("cover" if ref == cover_ref else ref) + "." + ALLOWED_IMG[mime]
         with open(os.path.join(bundle, name), "wb") as f:
@@ -261,9 +375,11 @@ def convert(doc, kind, drive, used_slugs):
         f.write("\n".join(fm) + body)
 
     url = f"{SITE_URL}{'posts/' if kind == 'post' else ''}{slug}/"
-    digest = hashlib.sha256(md.encode()).hexdigest()
+    digest = hashlib.sha256((CONVERTER_VERSION + md).encode()).hexdigest()
     record = {"name": doc["name"], "kind": kind, "slug": slug, "url": url,
               "hash": digest, "date": pub_date.isoformat() if pub_date else None}
+    if warnings:
+        record["warnings"] = warnings
     return record, []
 
 
@@ -355,6 +471,8 @@ def comment():
             msg = f"Scheduled: this post will appear on {item['date']} at {item['url']}"
         else:
             msg = f"Published on the website: {item['url']}"
+        if item.get("warnings"):
+            msg += "\n\nPlease note:\n- " + "\n- ".join(item["warnings"])
         _safe_comment(drive, item["id"], msg)
     for item in report.get("errors", []):
         msg = "Could not publish this Doc. Please fix the following, and the next run will try again:\n- " + "\n- ".join(item["errors"])
