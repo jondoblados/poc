@@ -60,8 +60,14 @@
   "url": "https://jon.doblados.net/poc/team/nicole-tretwer/"
  },
  "1QKvhl5Uz_3cqKbXnw2kTeKRlBLqG6SdwNGw9M1Mxh2E": {
-  "errorHash": "c8c0fede0909fd3ed53cd64b6fdba269667dc0fcd856500e878e6b7c90a3c283",
-  "name": "2026-09-04 Mid-Autumn Networking Under the Moon"
+  "date": "2026-09-04",
+  "hash": "b3f08fe9d8012e2e190169220055991ed90266c7a94a4e6f13cc31741933d19e",
+  "kind": "post",
+  "landing": false,
+  "name": "2026-09-04 Mid-Autumn Networking Under the Moon",
+  "path": "posts/mid-autumn-networking-under-the-moon",
+  "slug": "mid-autumn-networking-under-the-moon",
+  "url": "https://jon.doblados.net/poc/posts/mid-autumn-networking-under-the-moon/"
  },
  "1T0Pq69N3--fhb6sYKrCsVg1eMn9WAkrAxMnskZZXegI": {
   "date": null,
