@@ -7,8 +7,6 @@ signup: "https://mailerlite.manchester.edu.sg/ty/cl/eyJ2Ijoie1wiYVwiOjE0Mjc2Mjks
 description: "One or two sentences, max 160 characters. Shown on Facebook and LinkedIn previews."
 driveId: "1QKvhl5Uz_3cqKbXnw2kTeKRlBLqG6SdwNGw9M1Mxh2E"
 ---
-![]()
-
 Dear AMBSAAS family\!
 
 |  |

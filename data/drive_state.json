@@ -61,16 +61,13 @@
  },
  "1QKvhl5Uz_3cqKbXnw2kTeKRlBLqG6SdwNGw9M1Mxh2E": {
   "date": "2026-09-04",
-  "hash": "f29d143f2fb95c143fdad8fe5f30f899ccda983d9cf808f26ce526495d328cf8",
+  "hash": "b3f08fe9d8012e2e190169220055991ed90266c7a94a4e6f13cc31741933d19e",
   "kind": "post",
   "landing": false,
   "name": "2026-09-04 Mid-Autumn Networking Under the Moon",
   "path": "posts/mid-autumn-networking-under-the-moon",
   "slug": "mid-autumn-networking-under-the-moon",
-  "url": "https://jon.doblados.net/poc/posts/mid-autumn-networking-under-the-moon/",
-  "warnings": [
-   "1 image(s) were set to \"Wrap text\" (or similar) and have been placed above the paragraph they were attached to. For exact placement, click the image and choose \"In line\" in the toolbar."
-  ]
+  "url": "https://jon.doblados.net/poc/posts/mid-autumn-networking-under-the-moon/"
  },
  "1T0Pq69N3--fhb6sYKrCsVg1eMn9WAkrAxMnskZZXegI": {
   "date": null,
