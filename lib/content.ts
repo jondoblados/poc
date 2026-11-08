@@ -20,7 +20,7 @@ export const SITE_TITLE = "AMBSAAS (POC2)";
 export const SITE_DESCRIPTION =
   "Alliance Manchester Business School Alumni Association of Singapore - website POC2 (Google Docs -> Next.js -> GitHub Pages)";
 
-type Img = { src: string; width: number; height: number; og?: { src: string; width: number; height: number } };
+export type Img = { src: string; width: number; height: number; og?: { src: string; width: number; height: number } };
 const images = imageManifest as Record<string, Img>;
 
 export type Page = {
@@ -46,16 +46,25 @@ export type Page = {
   heading?: string;
 };
 
-const CONTENT = path.join(process.cwd(), "content");
+export const CONTENT = path.join(process.cwd(), "content");
+export const HOME_DIR = "home"; // LIVE > Pages > "Home" Doc
 
 /** Resolve a page-relative image (e.g. "image1.png" in content/membership/) to its processed WebP. */
-function resolveImage(pagePath: string, src: string): Img | undefined {
+export function resolveImage(pagePath: string, src: string): Img | undefined {
   if (/^([a-z]+:)?\/\//i.test(src) || src.startsWith("/") || src.startsWith("data:")) return undefined;
   const rel = path.posix.normalize(path.posix.join(pagePath, decodeURI(src)));
   return images[rel];
 }
 
 const OLD_SITE = /^https?:\/\/jon\.doblados\.net\/poc\//; // links in Docs that point at the Hugo POC
+
+/** Links typed in Docs: old POC URLs and site paths like "/membership/" point at this site. */
+export function siteLink(href: string): string {
+  href = href.trim();
+  if (OLD_SITE.test(href)) return href.replace(OLD_SITE, `${BASE}/`);
+  if (href.startsWith("/") && !href.startsWith("//") && !(BASE && href.startsWith(`${BASE}/`))) return `${BASE}${href}`;
+  return href;
+}
 
 type Rendered = { html: string; leadHtml: string; heading?: string; firstImage?: Img };
 
@@ -72,7 +81,7 @@ function render(md: string, pagePath: string, withLead: boolean): Rendered {
         node.properties.loading = "lazy";
       } else if (node.tagName === "a" && typeof node.properties.href === "string") {
         const href: string = node.properties.href;
-        if (OLD_SITE.test(href)) node.properties.href = href.replace(OLD_SITE, `${BASE}/`);
+        if (OLD_SITE.test(href)) node.properties.href = siteLink(href);
         else if (/^https?:/.test(href)) node.properties.rel = "noopener";
       }
     });
@@ -84,9 +93,24 @@ function render(md: string, pagePath: string, withLead: boolean): Rendered {
     .use(rehypeSanitize)
     .use(rewrite);
   const tree = processor.runSync(processor.parse(md)) as any;
+  dropTemplateHints(tree);
   const { lead, body, heading } = withLead ? splitLead(tree) : { lead: { type: "root", children: [] } as any, body: tree, heading: undefined };
   applyLayout(body);
   return { html: toHtml(body), leadHtml: toHtml(lead), heading, firstImage };
+}
+
+// Template hints such as "(Insert the poster here ...)" or "Speakers (optional, delete if not needed)"
+// are never published, even if an editor forgets to delete them.
+const HINT = /^\s*\((insert|optional|delete|paste|leave)\b[^)]*\)\s*$/i;
+const HINT_SUFFIX = /\s*\((optional|delete)\b[^)]*\)\s*$/i;
+const hastText = (n: any): string => (n.type === "text" ? n.value : (n.children ?? []).map(hastText).join(""));
+function dropTemplateHints(tree: any) {
+  tree.children = tree.children.filter((n: any) => !(n.type === "element" && n.tagName === "p" && HINT.test(hastText(n))));
+  visit(tree, "element", (n: any) => {
+    if (!/^h[1-6]$/.test(n.tagName)) return;
+    const last = n.children[n.children.length - 1];
+    if (last?.type === "text") last.value = last.value.replace(HINT_SUFFIX, "");
+  });
 }
 
 function* walk(dir: string): Generator<string> {
@@ -105,7 +129,7 @@ export function getPages(): Page[] {
   const pages: Page[] = [];
   for (const file of walk(CONTENT)) {
     const dir = path.relative(CONTENT, path.dirname(file)).split(path.sep).join("/");
-    if (!dir) continue;
+    if (!dir || dir === HOME_DIR) continue; // the Home Doc feeds the home page (lib/home.ts), not a page of its own
     const { data, content } = matter(fs.readFileSync(file, "utf8"));
     const date = data.date ? new Date(data.date) : null;
     // Future-dated posts stay hidden until 00:00 Singapore time on their Publish date (daily rebuild at 00:05 SGT).

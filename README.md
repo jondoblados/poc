@@ -53,3 +53,15 @@ RSS at `/ambsaas/index.xml`, and future-dated posts hidden until 00:00 SGT on th
   client-side navigation between pages.
 - Content model in `lib/content.ts` is independent of Hugo, so a later step can replace the Markdown hand-off with
   structured output from the Drive converter.
+
+## Templates and the Home Doc
+
+Drive templates live in `MBSAAS POC Web - DRAFTS/00 Help & Templates` (Page, Event, News, Member Spotlight,
+Post and Home Page templates, plus "Templates Guide (read me)"). They hold content only; layout and styling stay in this code.
+
+- `lib/home.ts` reads the optional `LIVE > Pages > Home` Doc (`content/home/index.md`): one Heading 1 per home
+  section with a `Field | Value` table. Missing sections or blank values fall back to the built-in copy. The Home Doc
+  has no page of its own.
+- Template hints in brackets that start with Insert, Optional, Delete, Paste or Leave are dropped when rendering, as is
+  an "(optional ...)" suffix on headings (`dropTemplateHints` in `lib/content.ts`).
+- `templates/` holds the placeholder pictures used by the Page Template.
