@@ -47,11 +47,11 @@ Honorary President
 [**Nicole Tretwer**](https://jon.doblados.net/poc/team/nicole-tretwer/)\
 Honorary Treasurer\
 ![](image3.png)\
-[**Lesley Ngai**](https://jon.doblados.net/poc/team/lesley-ngai/)\
+[**Lesley Ngai**](https://mbsaas.org/team/lesley-ngai/)\
 Honorary Member
 
 ![](image4.png)\
-[**Lester Teo**](https://jon.doblados.net/poc/team/lester-teo/)\
+[**Lester Teo**](https://mbsaas.org/team/lester-teo/)\
 Honorary Member
 
 ![](image5.png)\
@@ -59,5 +59,5 @@ Honorary Member
 Honorary Member
 
 ![](image6.png)\
-[**Desmond Heng**](https://jon.doblados.net/poc/team/desmond-heng/)\
+[**Desmond Heng**](https://mbsaas.org/team/desmond-heng/)\
 Honorary Secretary

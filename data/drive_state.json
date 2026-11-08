@@ -1,13 +1,33 @@
 {
- "13TuY-ZGYVP15cWON82lYAmEq58h7xi0ayofr9L8bsr0": {
+ "18jK1OcsgdznpKlK6W4rIv9B3s-OccD-LmCVPQ8LJ344": {
   "date": null,
-  "hash": "fd575e23e560b8af55fe8c9da72e769a5b41e7bca6aae0e7ca20545a459e2b63",
+  "hash": "b4722daa96fd5222bc9cdadeaa5a76b22c8040c00768e13fd42923920b90c091",
   "kind": "page",
   "landing": false,
-  "name": "Teo Teck Loon",
-  "path": "team/teo-teck-loon",
-  "slug": "teo-teck-loon",
-  "url": "https://jon.doblados.net/poc/team/teo-teck-loon/"
+  "name": "Elizabeth Hayashi",
+  "path": "team/elizabeth-hayashi",
+  "slug": "elizabeth-hayashi",
+  "url": "https://jon.doblados.net/poc/team/elizabeth-hayashi/"
+ },
+ "19bTED_Rmo3gbv_SxxV-6Y7BkVyXAne7Mj_jylsNxSKA": {
+  "date": null,
+  "hash": "abebcbb6f1dbd6c5bce16904cd6b20db804ae6ccd2ce520e1d8e8eeca2453a07",
+  "kind": "page",
+  "landing": false,
+  "name": "Sharon Oui",
+  "path": "team/sharon-oui",
+  "slug": "sharon-oui",
+  "url": "https://jon.doblados.net/poc/team/sharon-oui/"
+ },
+ "1BkWTda6Mrd3tjSrnBhDGUhnRk5DQvSIwInVFHJolasA": {
+  "date": null,
+  "hash": "09d88a1f8cd3df82687cd95086403f5b38826578f59d695f29648de7ae022317",
+  "kind": "page",
+  "landing": false,
+  "name": "Bryan Tan",
+  "path": "team/bryan-tan",
+  "slug": "bryan-tan",
+  "url": "https://jon.doblados.net/poc/team/bryan-tan/"
  },
  "1CXrY38Ucs1KE39UKC39IBH_WoZGTpm0VUB654z_JD1k": {
   "date": null,
@@ -29,6 +49,16 @@
   "slug": "signature-events",
   "url": "https://jon.doblados.net/poc/events/signature-events/"
  },
+ "1GQ37PUe_Du05ilbj6J27zWnef6wfw6QVh7skXI961hI": {
+  "date": null,
+  "hash": "92b34d43187b1f09693bc1b8c1f89a4852e3a55f9a01fa1022480050b5754dd9",
+  "kind": "page",
+  "landing": false,
+  "name": "Jiaci Duan",
+  "path": "team/jiaci-duan",
+  "slug": "jiaci-duan",
+  "url": "https://jon.doblados.net/poc/team/jiaci-duan/"
+ },
  "1GhUf9ma_2W2CoCDy0UktCjvMO5M6yby1pJEuRtkCCOo": {
   "date": "2026-10-02",
   "hash": "825802832d7852ca75f1479ced9f19bc8832cddb6b1721d2d5fcd628d5900abe",
@@ -39,25 +69,38 @@
   "slug": "alumni-networking-night",
   "url": "https://jon.doblados.net/poc/posts/alumni-networking-night/"
  },
- "1KH5oxGKwKVgeh68zAxzkLr7nukPEUrX7tSO5VJLaDEc": {
+ "1LYEnzsYrjQIZ5mYUqoSCV2Px9GMyFbo8l0uq5N1ewUw": {
   "date": null,
-  "hash": "df4a2be7baeae4ad5ede53da2e29d7f94d78037564445d829acc9ea8610124cf",
+  "hash": "e058ae017fe7170be61a5e85fdfee0c37c6fdd92e36be2906b5e4e206f958d42",
   "kind": "page",
   "landing": false,
-  "name": "Lester Teo",
-  "path": "team/lester-teo",
-  "slug": "lester-teo",
-  "url": "https://jon.doblados.net/poc/team/lester-teo/"
+  "name": "Sandy Chenxu",
+  "path": "team/sandy-chenxu",
+  "slug": "sandy-chenxu",
+  "url": "https://jon.doblados.net/poc/team/sandy-chenxu/"
  },
  "1Lcs6zp3JX0ADNMspUNeEZiilLLJDCH0wOzDcZ6yWDds": {
   "date": null,
-  "hash": "05081644b38d978cdb119e025bb1a4428de755aa49bef797259508e0bcbe34ce",
+  "hash": "0ce733df49fb39de1d99f0d753c8f0f68043997436417155ceb08fe7f1a70e38",
   "kind": "page",
   "landing": false,
   "name": "Nicole Tretwer",
   "path": "team/nicole-tretwer",
   "slug": "nicole-tretwer",
   "url": "https://jon.doblados.net/poc/team/nicole-tretwer/"
+ },
+ "1QF1DjElx3fCetQolrzzSRautYkh6gYyk_PXyQqfvxKU": {
+  "date": null,
+  "hash": "f0ab4155a9c547b9d722549875a377b647795c1aa5f418e6e066430e34946bd4",
+  "kind": "page",
+  "landing": false,
+  "name": "Teo Teck Loon",
+  "path": "team/teo-teck-loon",
+  "slug": "teo-teck-loon",
+  "url": "https://jon.doblados.net/poc/team/teo-teck-loon/",
+  "warnings": [
+   "1 image(s) were set to \"Wrap text\" (or similar) and have been placed above the paragraph they were attached to. For exact placement, click the image and choose \"In line\" in the toolbar."
+  ]
  },
  "1QKvhl5Uz_3cqKbXnw2kTeKRlBLqG6SdwNGw9M1Mxh2E": {
   "date": "2026-09-04",
@@ -68,6 +111,16 @@
   "path": "posts/mid-autumn-networking-under-the-moon",
   "slug": "mid-autumn-networking-under-the-moon",
   "url": "https://jon.doblados.net/poc/posts/mid-autumn-networking-under-the-moon/"
+ },
+ "1SigfHs_FXU-lVpNkqnmX5qwOgBEvyyxr5dP5i574f2k": {
+  "date": null,
+  "hash": "a9ebc8495ec8fc809ec6a8abdfbdf06b46cf85604fe8a7dca3286a0e2fc1e107",
+  "kind": "page",
+  "landing": false,
+  "name": "Jonathan Doblados",
+  "path": "team/jonathan-doblados",
+  "slug": "jonathan-doblados",
+  "url": "https://jon.doblados.net/poc/team/jonathan-doblados/"
  },
  "1T0Pq69N3--fhb6sYKrCsVg1eMn9WAkrAxMnskZZXegI": {
   "date": null,
@@ -101,7 +154,7 @@
  },
  "1ceoZjA1ZtmyrmszzyfgVoK7sU8uR30f3bzT5BRq4yPE": {
   "date": null,
-  "hash": "c5603debd3d1cd6102b7da17e4c466e898ac95c274286da68c094330e266f9fe",
+  "hash": "61420b35dafdaebfd2a74343b099c0733fd40ccb461f91446026548d1012232c",
   "kind": "page",
   "landing": false,
   "name": "Andrea Teo",
@@ -122,15 +175,15 @@
    "1 image(s) were set to \"Wrap text\" (or similar) and have been placed above the paragraph they were attached to. For exact placement, click the image and choose \"In line\" in the toolbar."
   ]
  },
- "1ok1KXJuR_1RNqL3RpEYGOKGHWYSS7hP3tcYQEpKU6Vs": {
+ "1n2dUFLVAm7lvCehcNJDvu9kLxpbSiSNXhlBa82_ZJa8": {
   "date": null,
-  "hash": "8689456beb142fb891e322bb4bf4ff38887abf59db34407873c34fe714e8f5b7",
+  "hash": "b06747e3cc8306b7d92a9c2704dd47a0fb24d15b224bde2f117f534dac5a1a5f",
   "kind": "page",
   "landing": false,
-  "name": "Lesley Ngai",
-  "path": "team/lesley-ngai",
-  "slug": "lesley-ngai",
-  "url": "https://jon.doblados.net/poc/team/lesley-ngai/"
+  "name": "Roger Lek",
+  "path": "team/roger-lek",
+  "slug": "roger-lek",
+  "url": "https://jon.doblados.net/poc/team/roger-lek/"
  },
  "1rDWZ3n0V4rMHVWHKdfXRvcvIO-tWQKoN5yi3a0SvQg0": {
   "date": null,
@@ -152,6 +205,26 @@
   "slug": "manchester-day-of-action-2026",
   "url": "https://jon.doblados.net/poc/posts/manchester-day-of-action-2026/"
  },
+ "1soaeW_4jCYr6AnfnYvsfubhHURGuF8FSXph9Y-N6GPw": {
+  "date": null,
+  "hash": "2d08e7a238e02712ed04609e372a15c9b5e49ac8eb63abe96a52627f665c9c44",
+  "kind": "page",
+  "landing": false,
+  "name": "Louis Chua",
+  "path": "team/louis-chua",
+  "slug": "louis-chua",
+  "url": "https://jon.doblados.net/poc/team/louis-chua/"
+ },
+ "1sz2WyCZbeyTBXegzVl3-fJP_E4pvbTCKg2UulZxzCB8": {
+  "date": null,
+  "hash": "2f2d1b5e1692286ceaa40efec168f75497c5a3cb0a8645ea1ee870562de6e479",
+  "kind": "page",
+  "landing": false,
+  "name": "Bai Lu",
+  "path": "team/bai-lu",
+  "slug": "bai-lu",
+  "url": "https://jon.doblados.net/poc/team/bai-lu/"
+ },
  "1u0kJoYTTqxPGK3Hw3gqT8H3IkdG7eBFrmdEihPHGf5o": {
   "date": null,
   "hash": "5122577d2d863b4005f440e30f8e5d0fccd8e2b8d0676d6fa92bece220d3038e",
@@ -161,6 +234,26 @@
   "path": "membership",
   "slug": "membership",
   "url": "https://jon.doblados.net/poc/membership/"
+ },
+ "1uDct5CxPnS0AJh2hOzKgQ2LdO0oORhVYEJK8divhk0Q": {
+  "date": null,
+  "hash": "4e0bd5690a544916242950777bb52888685fa49e6afc69db3287b0abf8932360",
+  "kind": "page",
+  "landing": false,
+  "name": "Chuin Yee Lee",
+  "path": "team/chuin-yee-lee",
+  "slug": "chuin-yee-lee",
+  "url": "https://jon.doblados.net/poc/team/chuin-yee-lee/"
+ },
+ "1v3g6G13tacPXXVeFU6pyR5CUlq2GNe0m_dWen-y8JUQ": {
+  "date": null,
+  "hash": "6cc2a82575d0948e8e760dca2d5e2c20159602fa51a2ea6561116a49a5398896",
+  "kind": "page",
+  "landing": false,
+  "name": "Justin Foo",
+  "path": "team/justin-foo",
+  "slug": "justin-foo",
+  "url": "https://jon.doblados.net/poc/team/justin-foo/"
  },
  "1vp-rNXphUx60Svqo3Iqz2uEKI3o0vU4KxHy9XuanDNA": {
   "date": null,
@@ -172,14 +265,14 @@
   "slug": "events",
   "url": "https://jon.doblados.net/poc/events/"
  },
- "1yITs_7LVs2bY1Mj2V6AVF1FUqdJYw8UeYGuRcgnXB2M": {
+ "1xWa5qjOqIeIMfvF70yHJF6YFcQfzmidKlA-Ae5GkhsM": {
   "date": null,
-  "hash": "eb14e3d8edbb678e184128445a8ec88b3119801e5e297160cfb0c997c9c06354",
+  "hash": "b58f3c1c821cea51a42f6999de28bce8b6583c9ea3aba438f60f733186221c08",
   "kind": "page",
   "landing": false,
-  "name": "Desmond Heng",
-  "path": "team/desmond-heng",
-  "slug": "desmond-heng",
-  "url": "https://jon.doblados.net/poc/team/desmond-heng/"
+  "name": "Lock See Lai",
+  "path": "team/lock-see-lai",
+  "slug": "lock-see-lai",
+  "url": "https://jon.doblados.net/poc/team/lock-see-lai/"
  }
 }

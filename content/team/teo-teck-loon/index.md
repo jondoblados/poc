@@ -2,14 +2,13 @@
 title: "Teo Teck Loon"
 weight: 1
 description: "Teo Teck Loon, Honorary President of AMBSAAS."
-driveId: "13TuY-ZGYVP15cWON82lYAmEq58h7xi0ayofr9L8bsr0"
+driveId: "1QF1DjElx3fCetQolrzzSRautYkh6gYyk_PXyQqfvxKU"
 ---
-![Teck-Loon](image1.png)
-
 #### Honorary President
 
-The Honorary Vice President is a newly created role since 2021\. This role is responsible to support the President in communicating the MBSAAS vision and mission to the members, other alumni associations, students and staff of the Alliance Manchester Business School. Other than the supporting role, this role looks into strengthening the profile and ensuring the progress of MBSAAS’s 4 key Special Interest Groups (SIG), STE@M, SOCIAL@M, SOCIAL@MEDIA and PROJECT@M which aims to connect and collaborate with alumni and existing students of Alliance Manchester Business School, thus making MBSAAS a vibrant and thriving alumni association in Singapore and SEA.
+Teck Loon serves as the Honorary President of AMBSAAS. A seasoned banking professional with over 18 years of experience, he is a veteran in building and transforming financial markets across the Asia Pacific region. Leveraging his strong leadership and strategic thinking, Teck Loon guides AMBSAAS in achieving its vision and mission of Unity & Inclusion, Entrepreneurship, Empowering local communities and the strengthening of AMBSAAS as a respected alumni association.
 
-Teck Loon has been appointed as the Hon Vice President of MBSAAS. He is veteran practice lead in the banking arena with more than 16 years of comprehensive and extensive experience in building, growing and transforming the Global Financial Market, Private Banking & Asset Management businesses in the APAC region. He is currently a Director in BNP Paribas Securities Service, heading up the Business Implementation and Change Management Team in Asia.
+Beyond his work at BNP Paribas Securities Service, where he heads Business Implementation, Change Management, and Transformation, Teck Loon is passionate about fostering collaboration between alumni and students. He actively mentors students and startups, demonstrating his commitment to the future of the AMBS community.
 
-Other than work, he is an active student mentor, a startup mentor and is looking forward to promote collaborations amongst alumni & students.
+
+![](image101.jpg)
