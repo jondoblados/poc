@@ -9,7 +9,8 @@ import remarkParse from "remark-parse";
 import remarkGfm from "remark-gfm";
 import remarkRehype from "remark-rehype";
 import rehypeSanitize from "rehype-sanitize";
-import rehypeStringify from "rehype-stringify";
+import { toHtml } from "hast-util-to-html";
+import { applyLayout, splitLead } from "./layout";
 import { visit } from "unist-util-visit";
 import imageManifest from "./image-manifest.json";
 
@@ -39,7 +40,10 @@ export type Page = {
   menu?: { weight: number; parent?: string; identifier: string };
   driveId?: string;
   cover?: Img;
+  thumb?: Img; // cover, or the first image in the Doc (used on section cards)
   html: string;
+  leadHtml: string; // headings + intro shown in the page header band
+  heading?: string;
 };
 
 const CONTENT = path.join(process.cwd(), "content");
@@ -51,25 +55,38 @@ function resolveImage(pagePath: string, src: string): Img | undefined {
   return images[rel];
 }
 
-function render(md: string, pagePath: string): string {
-  const rewriteImages = () => (tree: any) => {
+const OLD_SITE = /^https?:\/\/jon\.doblados\.net\/poc\//; // links in Docs that point at the Hugo POC
+
+type Rendered = { html: string; leadHtml: string; heading?: string; firstImage?: Img };
+
+function render(md: string, pagePath: string, withLead: boolean): Rendered {
+  let firstImage: Img | undefined;
+  const rewrite = () => (tree: any) => {
     visit(tree, "element", (node: any) => {
-      if (node.tagName !== "img") return;
-      const img = resolveImage(pagePath, String(node.properties.src ?? ""));
-      if (img) Object.assign(node.properties, { src: `${BASE}/${img.src}`, width: img.width, height: img.height });
-      node.properties.loading = "lazy";
+      if (node.tagName === "img") {
+        const img = resolveImage(pagePath, String(node.properties.src ?? ""));
+        if (img) {
+          Object.assign(node.properties, { src: `${BASE}/${img.src}`, width: img.width, height: img.height });
+          firstImage ??= img;
+        }
+        node.properties.loading = "lazy";
+      } else if (node.tagName === "a" && typeof node.properties.href === "string") {
+        const href: string = node.properties.href;
+        if (OLD_SITE.test(href)) node.properties.href = href.replace(OLD_SITE, `${BASE}/`);
+        else if (/^https?:/.test(href)) node.properties.rel = "noopener";
+      }
     });
   };
-  return String(
-    unified()
-      .use(remarkParse)
-      .use(remarkGfm)
-      .use(remarkRehype) // raw HTML in Docs is dropped, never rendered (same as Hugo's unsafe=false)
-      .use(rehypeSanitize)
-      .use(rewriteImages)
-      .use(rehypeStringify)
-      .processSync(md),
-  );
+  const processor = unified()
+    .use(remarkParse)
+    .use(remarkGfm)
+    .use(remarkRehype) // raw HTML in Docs is dropped, never rendered (same as Hugo's unsafe=false)
+    .use(rehypeSanitize)
+    .use(rewrite);
+  const tree = processor.runSync(processor.parse(md)) as any;
+  const { lead, body, heading } = withLead ? splitLead(tree) : { lead: { type: "root", children: [] } as any, body: tree, heading: undefined };
+  applyLayout(body);
+  return { html: toHtml(body), leadHtml: toHtml(lead), heading, firstImage };
 }
 
 function* walk(dir: string): Generator<string> {
@@ -96,13 +113,16 @@ export function getPages(): Page[] {
     const m = data.menus?.main;
     const coverKey = Object.keys(images).find((k) => k.startsWith(`${dir}/cover.`));
     const url = `${BASE}/${dir}/`;
+    const section = dir.split("/")[0];
+    const cover = coverKey ? images[coverKey] : undefined;
+    const r = render(content, dir, section !== "posts" && section !== "team");
     pages.push({
       path: dir,
       slug: dir.split("/"),
       url,
       permalink: new URL(`${dir}/`, SITE_URL).toString(),
       isSection: path.basename(file) === "_index.md",
-      section: dir.split("/")[0],
+      section,
       title: String(data.title ?? dir),
       description: String(data.description ?? ""),
       weight: Number(data.weight ?? 0),
@@ -112,8 +132,11 @@ export function getPages(): Page[] {
       signup: data.signup,
       menu: m ? { weight: Number(m.weight ?? 0), parent: m.parent, identifier: m.identifier ?? dir.split("/").pop()! } : undefined,
       driveId: data.driveId,
-      cover: coverKey ? images[coverKey] : undefined,
-      html: render(content, dir),
+      cover,
+      thumb: cover ?? r.firstImage,
+      html: r.html,
+      leadHtml: r.leadHtml,
+      heading: r.heading,
     });
   }
   return (cache = pages);
@@ -135,13 +158,16 @@ export const getChildren = (p: Page) =>
 
 export const getPosts = () => getPages().filter((p) => p.section === "posts" && !p.isSection).sort(byWeight);
 
+export const getParent = (p: Page) => (p.slug.length > 1 ? getPage(p.slug.slice(0, -1)) : undefined);
+
 export type MenuItem = { name: string; url: string; children: MenuItem[] };
 
 /** Main menu from front matter (menus.main), same as the Hugo site: folders with a section Doc get a drop-down. */
 export function getMenu(): MenuItem[] {
   const items = getPages().filter((p) => p.menu);
   const sort = (a: Page, b: Page) => a.menu!.weight - b.menu!.weight || a.title.localeCompare(b.title);
-  return items
+  const home: MenuItem = { name: "Home", url: `${BASE}/`, children: [] };
+  return [home, ...items
     .filter((p) => !p.menu!.parent)
     .sort(sort)
     .map((p) => ({
@@ -151,7 +177,7 @@ export function getMenu(): MenuItem[] {
         .filter((c) => c.menu!.parent === p.menu!.identifier)
         .sort(sort)
         .map((c) => ({ name: c.title, url: c.url, children: [] })),
-    }));
+    }))];
 }
 
 const fmt = (d: Date, opts: Intl.DateTimeFormatOptions) => d.toLocaleDateString("en-GB", { timeZone: "UTC", ...opts });

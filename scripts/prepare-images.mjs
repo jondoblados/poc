@@ -1,4 +1,4 @@
-// Copies page-bundle images from content/ to public/ as WebP (max 1200px wide) and
+// Copies static/ (logo, hero) to public/, then page-bundle images from content/ to public/ as WebP (max 1200px wide) and
 // writes lib/image-manifest.json with dimensions, so pages get width/height (no layout shift).
 // Same processing the Hugo POC did in layouts/_markup/render-image.html.
 // Social-preview (og:image) copies are written as JPG, which Facebook/LinkedIn handle everywhere.
@@ -20,6 +20,8 @@ async function* walk(dir) {
 }
 
 await fs.rm(publicDir, { recursive: true, force: true });
+// Site assets that are not edited in Google Docs (logo, homepage hero) live in static/.
+await fs.cp(path.join(root, "static"), publicDir, { recursive: true });
 let n = 0;
 for await (const file of walk(contentDir)) {
   const rel = path.relative(contentDir, file).split(path.sep).join("/");
