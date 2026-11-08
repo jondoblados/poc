@@ -1,125 +1,55 @@
-# POC: Google Docs → Hugo → GitHub Pages
+# POC2: Google Docs → Next.js → GitHub Pages
 
-Proof of concept for the MBSAAS website plan. Content is written in Google Docs; GitHub Actions turns approved Docs into a Hugo site and publishes it to **https://jon.doblados.net/poc/**.
+Branch `poc2` of this repository. Same Google Docs publishing workflow as the Hugo POC (`main`, live at
+https://jon.doblados.net/poc/), but the website itself is a **Next.js (React) app**, exported as static files and
+published at **https://jon.doblados.net/ambsaas/**.
 
-This is a separate project repository. Because the user site (`jondoblados.github.io`) uses the custom domain `jon.doblados.net`, GitHub Pages serves this repo at `/poc/` automatically. The Jekyll site is not touched.
+| | POC1 (`main`) | POC2 (`poc2`) |
+|---|---|---|
+| Editing | Google Docs in the LIVE Drive folder | unchanged |
+| Docs → content | `scripts/drive_to_hugo.py` → `content/` page bundles | unchanged (content is taken from `main`) |
+| Website | Hugo templates (`layouts/`) | Next.js App Router + React (`app/`, `lib/content.ts`) |
+| Output | `hugo` → `public/` | `next build` (`output: "export"`) → `out/` |
+| Hosting | GitHub Pages, repo `poc` → `/poc/` | GitHub Pages, repo [`ambsaas`](https://github.com/jondoblados/ambsaas) → `/ambsaas/` |
 
 ## How it works
 
 ```
-Google Drive (jon@doblados.net)
-└── MBSAAS Website POC
-    ├── MBSAAS POC Web - DRAFTS        everyone writes here
-    │   ├── 00 Help & Templates        Post Template, How to Publish
-    │   ├── 01 Drafts
-    │   ├── 02 Ready for Review
-    │   └── 99 Archive
-    └── MBSAAS POC Web - LIVE          what is here = what is on the site
-        ├── Posts                      → /poc/posts/<slug>/
-        ├── Pages                      → /poc/<slug>/   (added to the menu)
-        │   ├── Membership, Contact Us, About
-        │   ├── Resources/             a sub-folder = a menu section with a drop-down
-        │   │   ├── Resources          Doc named like the folder = the section page (/poc/resources/)
-        │   │   ├── Professional Services  → /poc/resources/professional-services/
-        │   │   └── Student Mentoring
-        │   ├── Events/  (Events, Signature Events, Community Events)
-        │   └── Team/    no "Team" Doc → section is not in the menu (profiles linked from About)
-        └── Images
-
-GitHub Actions (.github/workflows/publish.yml)
-  every 15 min 08:00-24:00 SGT, daily 00:05 SGT, or "Run workflow"
-  1. google-github-actions/auth   Workload Identity Federation → short-lived Drive token (no keys)
-  2. scripts/drive_to_hugo.py     export each LIVE Doc as Markdown, read the Field|Value table,
-                                  extract images, write content/ page bundles, validate
-  3. commit content/ + data/      audit trail and rollback in Git history
-  4. hugo --minify                WebP images, Open Graph tags for Facebook/LinkedIn, RSS feed
-  5. actions/deploy-pages         publish
-  6. notify job                   comments on each Doc: "Published: <url>" or "Could not publish: …"
+Google Docs (LIVE)  ──every 15 min──►  main: drive_to_hugo.py → content/ + data/   (POC1 workflow, unchanged;
+                                                                                   it also comments on the Docs)
+jondoblados/ambsaas workflow (every 15 min 08:00-24:00 SGT, daily 00:05 SGT, or "Run workflow"):
+  1. checkout poc@poc2 (website code)  +  content/ and data/ from poc@main (latest Drive content)
+  2. skip if neither has changed since the last deploy (reads /ambsaas/build.json)
+  3. npm ci && npm run build
+       scripts/prepare-images.mjs   images → WebP (max 1200 px) + JPG social previews, with dimensions
+       lib/content.ts               reads front matter + Markdown, renders and sanitises HTML (raw HTML dropped)
+       app/                         React layouts: home, pages, sections with drop-down menus, posts, RSS
+  4. actions/deploy-pages → https://jon.doblados.net/ambsaas/
 ```
 
-If the Google variables are not set (or Google is unavailable), the workflow still builds and deploys from the content already committed to the repo.
+Drive access, Workload Identity Federation and "Published: …" comments stay on `main` only, so the Docs do not get
+duplicate comments and no new Google permissions are needed for POC2.
 
-## One-time setup: Workload Identity Federation (Google Cloud)
-
-Easiest: in [Cloud Shell](https://shell.cloud.google.com) run `curl -sSLO https://raw.githubusercontent.com/jondoblados/poc/main/scripts/gcp_setup.sh && bash gcp_setup.sh <EXISTING_PROJECT_ID>` (idempotent, rate-limit safe). The manual equivalent is below. Replace `PROJECT_ID`.
+## Develop locally
 
 ```bash
-PROJECT_ID="your-project-id"
-PROJECT_NUMBER=$(gcloud projects describe "$PROJECT_ID" --format='value(projectNumber)')
-SA="poc-drive-publisher@${PROJECT_ID}.iam.gserviceaccount.com"
-
-# APIs
-gcloud services enable iam.googleapis.com iamcredentials.googleapis.com sts.googleapis.com drive.googleapis.com --project "$PROJECT_ID"
-
-# Service account: the identity that Drive sees. It gets NO project roles.
-gcloud iam service-accounts create poc-drive-publisher \
-  --display-name="POC Drive publisher (GitHub Actions jondoblados/poc)" --project "$PROJECT_ID"
-
-# Workload Identity Pool + GitHub OIDC provider, locked to this repo (by immutable IDs) and the main branch
-gcloud iam workload-identity-pools create github \
-  --location=global --display-name="GitHub Actions" --project "$PROJECT_ID"
-
-gcloud iam workload-identity-pools providers create-oidc poc-repo \
-  --location=global --workload-identity-pool=github --display-name="jondoblados/poc" \
-  --issuer-uri="https://token.actions.githubusercontent.com" \
-  --attribute-mapping="google.subject=assertion.sub,attribute.repository=assertion.repository,attribute.repository_id=assertion.repository_id,attribute.repository_owner_id=assertion.repository_owner_id,attribute.ref=assertion.ref" \
-  --attribute-condition="assertion.repository_owner_id=='1370746' && assertion.repository_id=='1401273102' && assertion.ref=='refs/heads/main'" \
-  --project "$PROJECT_ID"
-
-# Allow only this repo to impersonate the service account
-gcloud iam service-accounts add-iam-policy-binding "$SA" --project "$PROJECT_ID" \
-  --role="roles/iam.workloadIdentityUser" \
-  --member="principalSet://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/github/attribute.repository_id/1401273102"
-
-# Values for GitHub
-echo "GCP_WIF_PROVIDER=projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/github/providers/poc-repo"
-echo "GCP_SERVICE_ACCOUNT=${SA}"
+npm ci
+npm run dev                     # http://localhost:3000/ambsaas/
+npm run build                   # static site in out/
+BASE_PATH= npm run build        # build for a domain root (e.g. a future production host)
 ```
 
-Then:
+To preview the latest Drive content locally: `git checkout origin/main -- content data` (do not commit it on `poc2`).
 
-1. **GitHub repo variables** (Settings → Secrets and variables → Actions → Variables): `GCP_WIF_PROVIDER`, `GCP_SERVICE_ACCOUNT` (from the output above). `LIVE_FOLDER_ID` is already set. These are identifiers, not secrets.
-2. **Share only the LIVE folder** with the service account email as **Commenter** (read + comment, cannot edit). Do not share DRAFTS.
-   - Google Workspace may block sharing with addresses outside `doblados.net`. If so, allow external sharing for your account/OU in Admin console → Apps → Google Workspace → Drive and Docs → Sharing settings (or add `iam.gserviceaccount.com` to trusted domains, if your edition supports allowlists).
-3. Actions → **Publish from Google Drive** → **Run workflow**.
+## What is the same as POC1
 
-## Test script (end-to-end)
+URLs (`/ambsaas/<page>/`, `/ambsaas/posts/<slug>/`), menu and drop-downs from Drive folders, section pages with
+sub-page cards, cover images, event date and Sign up button, Facebook/LinkedIn share links and Open Graph tags,
+RSS at `/ambsaas/index.xml`, and future-dated posts hidden until 00:00 SGT on their Publish date.
 
-| # | Action in Google Drive | Expected result |
-|---|---|---|
-| 1 | Nothing (initial state) | `/poc/` shows "Manchester Day of Action 2026" and the About page |
-| 2 | Move `2026-10-30 Alumni Networking Night` from `01 Drafts` to `LIVE/Posts` | Within 15 min (or Run workflow) it appears; bot comments "Published: …" on the Doc |
-| 3 | Edit the summary of a LIVE Doc | Page updates; new comment with the link |
-| 4 | Clear the "Short summary" cell of a LIVE Doc | Bot comments "Could not publish…"; the last good version stays online |
-| 5 | Copy the Post Template, set Publish date to tomorrow, move to LIVE | Bot comments "Scheduled…"; post appears after 00:05 SGT |
-| 6 | Move a Doc out of LIVE to `99 Archive` | Page disappears at the next run |
+## What is new
 
-## Local development
-
-```bash
-# Hugo extended 0.167.0
-hugo server                                   # preview committed content
-# Sync from Drive locally (uses the gws CLI or an access token)
-DRIVE_BACKEND=gws LIVE_FOLDER_ID=... python3 scripts/drive_to_hugo.py build
-GOOGLE_ACCESS_TOKEN=$(gcloud auth print-access-token) LIVE_FOLDER_ID=... python3 scripts/drive_to_hugo.py build
-```
-
-## Page table fields
-
-| Field | Used for |
-|---|---|
-| Title | Page title, menu label and web address |
-| Menu order | Position in the menu (1 = first) |
-| Show in menu | `No` hides the page from the menu |
-| Short summary | Search/social description and the card text on section pages |
-
-Links to the old site (`https://mbsaas.org/...`) are rewritten automatically to the matching new page.
-
-## Security notes
-
-- No long-lived Google credentials anywhere: the token is minted per run via OIDC and lives 5-10 minutes.
-- The provider only trusts this repository (by numeric ID) on `main`; forks and PRs can't get a token.
-- The service account only sees what is shared with it (LIVE folder, Commenter).
-- Raw HTML from Docs is never rendered (`markup.goldmark.renderer.unsafe = false`); only PNG/JPG/GIF/WebP images up to 15 MB are accepted.
-- All Actions are pinned to commit SHAs.
-- `content/` is generated: edit Docs, not Markdown files. Design changes (layouts, CSS) are normal commits.
+- React components (`app/components/`), with a client-side menu (current-page highlight, mobile Menu button) and
+  client-side navigation between pages.
+- Content model in `lib/content.ts` is independent of Hugo, so a later step can replace the Markdown hand-off with
+  structured output from the Drive converter.

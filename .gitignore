@@ -1,4 +1,10 @@
-.publish/
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+# generated at build time by scripts/prepare-images.mjs
 public/
-resources/
-.hugo_build.lock
+lib/image-manifest.json
+.publish/
+__pycache__/

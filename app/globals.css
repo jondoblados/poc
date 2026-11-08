@@ -32,3 +32,8 @@ h2{margin-top:32px}
 .button{display:inline-block;background:var(--navy);color:#fff;padding:10px 20px;border-radius:99px;text-decoration:none;font-weight:600}
 .share{margin-top:24px;padding-top:16px;border-top:1px solid #ddd}.share a{margin-left:10px}
 .site-footer{color:var(--muted);font-size:.85rem;padding:24px 20px 40px;border-top:1px solid #ddd}
+/* POC2 additions */
+.menu-toggle{display:none;background:none;border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:8px;padding:6px 12px;font:inherit;cursor:pointer}
+@media (max-width:700px){.menu-toggle{display:inline-block}.site-header nav{flex-basis:100%}.site-header nav:not(.open){display:none}.menu{flex-direction:column;padding-bottom:12px}}
+.content table{border-collapse:collapse;width:100%;margin:16px 0}.content th,.content td{border:1px solid #ddd;padding:6px 10px;text-align:left}
+.badge{font-size:.75rem;background:rgba(255,255,255,.12);border-radius:99px;padding:2px 8px;margin-left:8px;color:#fff;font-weight:400}

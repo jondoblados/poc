@@ -1,0 +1,33 @@
+{
+  "name": "ambsaas-poc2",
+  "private": true,
+  "description": "POC2: Google Docs (Drive) -> Next.js static export -> GitHub Pages at jon.doblados.net/ambsaas/",
+  "scripts": {
+    "prebuild": "node scripts/prepare-images.mjs",
+    "build": "next build",
+    "predev": "node scripts/prepare-images.mjs",
+    "dev": "next dev"
+  },
+  "engines": {
+    "node": ">=20.9"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "next": "^16.4.5",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "rehype-sanitize": "^6.0.0",
+    "rehype-stringify": "^10.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.2",
+    "sharp": "^0.35.5",
+    "unified": "^11.0.5",
+    "unist-util-visit": "^5.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "@types/react": "^19.3.0",
+    "typescript": "^5.9.3"
+  }
+}
