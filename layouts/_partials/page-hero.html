@@ -1,0 +1,5 @@
+<section class="page-hero"><div class="container hugo-page-title">
+{{ if not .IsHome }}<p class="crumbs"><a href="{{ "" | relURL }}">Home</a>{{ with .Parent }}{{ if not .IsHome }} / <a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}{{ end }}</p>{{ end }}
+{{ if eq .Section "posts" }}{{ if .IsPage }}<p class="post-meta">{{ range .Params.categories }}<span class="tag">{{ . }}</span>{{ end }}<span>{{ .Date.Format "Monday, 2 January 2006" }}</span></p>{{ end }}{{ end }}
+<h1>{{ .Title }}</h1>{{ if and (eq .Section "posts") .IsPage }}{{ with .Description }}<p>{{ . }}</p>{{ end }}{{ end }}
+</div>{{ partial "wave.html" . }}</section>

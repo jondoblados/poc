@@ -1,0 +1,2 @@
+{{ $photo := false }}{{ with .Resources.ByType "image" }}{{ $photo = index . 0 }}{{ end }}
+<a class="tile{{ if not $photo }} tile-plain{{ end }}" href="{{ .RelPermalink }}">{{ with $photo }}<img src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="" loading="lazy">{{ end }}<span class="tile-body"><strong>{{ .Title }}</strong>{{ with .Description }}<span>{{ . }}</span>{{ end }}</span></a>
