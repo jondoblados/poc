@@ -1,0 +1,29 @@
+{{/* Team Docs are the single source of truth for the About council roster. */}}
+{{ $members := where site.RegularPages "Section" "team" }}
+{{ with $members.ByWeight }}
+<section aria-labelledby="council-heading" style="margin-top:3rem">
+  <h2 id="council-heading">Meet the Council Members</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:2rem;margin-top:2rem">
+    {{ range . }}
+      {{ $member := . }}
+      {{ $role := .Description }}
+      {{ range first 1 (findRE `(?is)<h[1-6][^>]*>.*?</h[1-6]>` .Content) }}
+        {{ $role = . | plainify | htmlUnescape }}
+      {{ end }}
+      <article style="text-align:center">
+        <a href="{{ .RelPermalink }}" style="display:block">
+          {{ $photos := .Resources.ByType "image" }}
+          {{ with $photos }}
+            {{ $photo := index . 0 }}
+            <img src="{{ $photo.RelPermalink }}" width="{{ $photo.Width }}" height="{{ $photo.Height }}" alt="{{ $member.Title }}" loading="lazy" style="display:block;width:160px;height:160px;object-fit:cover;border-radius:50%;margin:0 auto 1rem">
+          {{ else }}
+            <span aria-hidden="true" style="display:block;width:160px;height:160px;border-radius:50%;background:#eee;margin:0 auto 1rem"></span>
+          {{ end }}
+          <h3>{{ .Title }}</h3>
+        </a>
+        {{ with $role }}<p>{{ . }}</p>{{ end }}
+      </article>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

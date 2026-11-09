@@ -4,7 +4,14 @@
   <h1>{{ .Title }}</h1>
   {{ with .Params.eventDate }}<p class="event"><strong>When:</strong> {{ . }}</p>{{ end }}
   {{ with partial "cover.html" . }}<img class="cover" src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="{{ $.Title }}">{{ end }}
-  <div class="content">{{ .Content }}</div>
+  {{ $isAbout := in (slice "about-ambsaas/" "about-mbsaas/") .File.Dir }}
+  {{ $body := .Content }}
+  {{ if $isAbout }}
+    {{/* The legacy roster is the final section of the About Doc. */}}
+    {{ $body = replaceRE `(?is)<h[1-6][^>]*>(?:<[^>]+>|\s)*(?:meet\s+(?:the\s+)?)?council(?:\s+members)?(?:<[^>]+>|\s)*</h[1-6]>.*$` "" $body }}
+  {{ end }}
+  <div class="content">{{ $body | safeHTML }}</div>
+  {{ if $isAbout }}{{ partial "council.html" . }}{{ end }}
   {{ with .Params.signup }}<p><a class="button" href="{{ . }}" rel="noopener">Sign up</a></p>{{ end }}
   {{ if eq .Section "posts" }}
   <div class="share">
