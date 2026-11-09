@@ -8,6 +8,7 @@
 //   a line that is only a link                      -> gold button                       ("Join Us Now")
 //   headings + short intro at the top of a page     -> page header band (see splitLead)
 import type { Element, ElementContent, Root, RootContent } from "hast";
+import { normalizeLayoutTables } from "./layout-tables";
 
 type Node = RootContent;
 const el = (tagName: string, className: string[], children: ElementContent[]): Element => ({
@@ -115,6 +116,7 @@ function buttons(nodes: Node[]): Node[] {
 
 /** Applies the layout rules to the top level of the document body. */
 export function applyLayout(tree: Root) {
+  normalizeLayoutTables(tree);
   let nodes = tree.children.filter((n) => !isWs(n));
   nodes = features(nodes);
   nodes = galleries(nodes);
