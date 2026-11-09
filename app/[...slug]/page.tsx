@@ -128,7 +128,17 @@ export default async function ContentPage({ params }: Props) {
   }
   if (page.section === "team" && !page.isSection) {
     const photo = page.thumb;
-    const html = photo ? page.html.replace(/^<figure class="figure">[\s\S]*?<\/figure>/, "") : page.html;
+    let removedPortrait = false;
+    // Match the separately displayed portrait by URL, wherever it occurs in the body.
+    // Remove just one matching image, leaving all other photos and text intact.
+    const html = photo ? page.html.replace(/<img\b[^>]*>/gi, (tag) => {
+      const src = tag.match(/\bsrc="([^"]*)"/i)?.[1];
+      if (!removedPortrait && src === `${BASE}/${photo.src}`) {
+        removedPortrait = true;
+        return "";
+      }
+      return tag;
+    }).replace(/<(figure|p)\b[^>]*>\s*<\/\1>/gi, "") : page.html;
     const about = getPage(["about-ambsaas"]);
     return <>
       <PageHero page={page}>
