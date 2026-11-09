@@ -163,8 +163,14 @@
   "url": "https://jon.doblados.net/poc/team/andrea-teo/"
  },
  "1eE3saQYxoLJmK-UraNgNLH3zkRvjvEvTCdWIqRlgmXo": {
-  "errorHash": "400e2f9ca1446389e7894215daea40fe8847e35aba4f5776174ee2ee6cf9d236",
-  "name": "2026-12-03 AMBSAAS Annual Christmas Dinner"
+  "date": "2026-11-09",
+  "hash": "139780fa1ee66067feb0f015309096aa39d073f2cd7edcd987ed153426962d18",
+  "kind": "post",
+  "landing": false,
+  "name": "2026-12-03 AMBSAAS Annual Christmas Dinner",
+  "path": "posts/ambsaas-annual-christmas-dinner",
+  "slug": "ambsaas-annual-christmas-dinner",
+  "url": "https://jon.doblados.net/poc/posts/ambsaas-annual-christmas-dinner/"
  },
  "1fQG8gFj7rSeOmaGqMtrWhX410HE_rR7eU0z1pButizU": {
   "date": null,
