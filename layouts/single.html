@@ -21,4 +21,5 @@
   </div>
   {{ end }}
 </article>
+{{ if eq .Section "team" }}{{ partial "team-carousel.html" . }}{{ end }}
 {{ end }}

@@ -1,0 +1,32 @@
+{{ $current := .RelPermalink }}
+{{ $members := (where site.RegularPages "Section" "team").ByWeight }}
+{{ with $members }}
+<link rel="stylesheet" href="{{ "team-carousel.css" | relURL }}">
+<section class="team-carousel" aria-labelledby="team-carousel-heading" aria-roledescription="carousel" data-team-carousel>
+  <div class="team-carousel-header">
+    <h2 id="team-carousel-heading">Meet the team</h2>
+    <div class="team-carousel-controls" hidden>
+      <button type="button" data-direction="-1" aria-label="Previous team members" aria-controls="team-carousel-track">&#8592;</button>
+      <button type="button" data-direction="1" aria-label="Next team members" aria-controls="team-carousel-track">&#8594;</button>
+    </div>
+  </div>
+  <p id="team-carousel-help">Browse the council and select a member to read their profile.</p>
+  <div id="team-carousel-track" class="team-carousel-track" tabindex="0" role="group" aria-label="Team member profiles" aria-describedby="team-carousel-help">
+    {{ range . }}
+      {{ $member := . }}
+      {{ $role := .Description }}
+      {{ range first 1 (findRE `(?is)<h[1-6][^>]*>.*?</h[1-6]>` .Content) }}{{ $role = . | plainify | htmlUnescape }}{{ end }}
+      <a class="team-carousel-card" href="{{ .RelPermalink }}" {{ if eq .RelPermalink $current }}aria-current="page"{{ end }}>
+        {{ with .Resources.ByType "image" }}
+          {{ $photo := index . 0 }}
+          <img src="{{ $photo.RelPermalink }}" width="{{ $photo.Width }}" height="{{ $photo.Height }}" alt="" loading="lazy">
+        {{ else }}<span class="team-carousel-placeholder" aria-hidden="true"></span>{{ end }}
+        <h3>{{ $member.Title }}</h3>
+        {{ with $role }}<p>{{ . }}</p>{{ end }}
+        {{ if eq .RelPermalink $current }}<small>Current profile</small>{{ end }}
+      </a>
+    {{ end }}
+  </div>
+</section>
+<script src="{{ "team-carousel.js" | relURL }}" defer></script>
+{{ end }}
