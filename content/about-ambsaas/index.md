@@ -9,19 +9,19 @@ driveId: "1fQG8gFj7rSeOmaGqMtrWhX410HE_rR7eU0z1pButizU"
 ---
 ## **About AMBSAAS**
 
-Established in November 2003, The Alliance Manchester Business School Alumni Association of Singapore (AMBSAAS) is one of only 2 alumni associations in the world formed specifically for MBS alumnus. All subsequent alumni associations formed after us in their respective localities are UOM alumni associations.
+Established in November 2003, the Alliance Manchester Business School Alumni Association of Singapore (AMBSAAS) holds a unique distinction in our institution’s global history: it is one of only two alumni associations worldwide formed specifically for MBS graduates prior to the transition toward broader University of Manchester (UOM) alumni networks.
 
-Come 2023, AMBSAAS will be celebrating its 20th anniversary. Looking back over the years, we have had the good fortune of having many alumni who came forward to volunteer their time on the Council to organise academic and technical evening talks, social gatherings, fundraisers, the annual Manchester Day of Action and many other networking events. Many of you also came back to support the Centre in their marketing efforts by speaking to prospective and new students, imparting on them the knowledge, experiences and camaraderie that you yourself have benefitted from, during your MBA journey.
+With over two decades of community, leadership, and impact behind us, having celebrated our landmark 20th anniversary, AMBSAAS continues to serve as a vital bridge for Manchester alumni across Singapore. Over the years, dedicated alumni have generously volunteered on the Council to host technical and academic evening talks, social gatherings, community fundraisers, the annual Manchester Day of Action, and high-value networking sessions. Many have also given back by sharing their experiences and insights with prospective and incoming MBA candidates, reinforcing the strong culture of mentorship that defines the Manchester journey.
 
-As our AMBS alumni progresses in their careers, they continue to bring good repute to AMBS in the business and wider community by carrying themselves professionally and competently amongst their colleagues and peers. AMBSAAS is very proud of each and every one of our alumni.
+As our alumni advance into leadership roles across diverse industries, their professional excellence continuously elevates the reputation of AMBS within the regional business landscape.
 
-20 years on, AMBSAAS has achieved the objectives set out in its constitution and will continue doing so in the years to come:
+Today, AMBSAAS remains steadfast in fulfilling the core mission set out in its constitution:
 
-* *Create networking opportunities with and between alumni*
-* *Supporting the marketing efforts of AMBS*
-* *Improving the status of AMBS through members’ influences in the business and wider community*
+* **Fostering Connection:** Building meaningful professional and social networks between alumni across all cohorts.
+* **Supporting Institutional Growth:** Championing AMBS recruitment, outreach, and mentorship initiatives in Singapore.
+* **Elevating Brand Prestige:** Enhancing the standing of AMBS through the active influence and leadership of our members in the wider community.
 
-The value of our MBA is not just the knowledge and insights gained but also, the camaraderie formed during our studies and across batches of alumni that went before us, and those to come. We warmly welcome you to actively participate in AMBSAAS activities whenever you can and tap into the Manchester Network.A
+The true return on a Manchester MBA extends far beyond academic instruction. It lives in the lifelong camaraderie and trusted professional network built across generations of graduates. We warmly invite all Manchester alumni in Singapore to participate in upcoming AMBSAAS activities, share your expertise, and tap into the power of the global Manchester Network.
 
 #### **Founding President**
 
@@ -39,25 +39,4 @@ In his free time, Wayne provides mentorship to start-ups and students of the AMB
 
 ### **Meet the Council Members**
 
-![](image1.png)\
-[**Teo Teck Loon**](https://jon.doblados.net/poc/team/teo-teck-loon/)\
-Honorary President
-
-![](image2.png)\
-[**Nicole Tretwer**](https://jon.doblados.net/poc/team/nicole-tretwer/)\
-Honorary Treasurer\
-![](image3.png)\
-[**Lesley Ngai**](https://mbsaas.org/team/lesley-ngai/)\
-Honorary Member
-
-![](image4.png)\
-[**Lester Teo**](https://mbsaas.org/team/lester-teo/)\
-Honorary Member
-
-![](image5.png)\
-[**Andrea Teo**](https://jon.doblados.net/poc/team/andrea-teo/)\
-Honorary Member
-
-![](image6.png)\
-[**Desmond Heng**](https://mbsaas.org/team/desmond-heng/)\
-Honorary Secretary
+*Editor note — this section is generated automatically on the website from LIVE → Pages → Team. Do not maintain member names, photos or roles here. Edit each member’s Team document instead. Use its Menu order field to control the display order. Changes appear after a successful content sync and website deployment.*
