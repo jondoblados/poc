@@ -1,7 +1,19 @@
 {{ define "main" }}
-{{ partial "page-hero.html" . }}
-<section class="page-body"><div class="container"><div class="content hugo-content">{{ .Content }}</div>
-{{ if eq .Section "posts" }}<div class="cards">{{ range .Pages }}{{ partial "card.html" . }}{{ end }}</div>
-{{ else }}{{ with .Pages.ByWeight }}<div class="tiles subpages">{{ range . }}{{ partial "tile.html" . }}{{ end }}</div>{{ end }}{{ end }}
-</div></section>
+{{ if eq .Section "posts" }}
+<h1>{{ .Title }}</h1>
+{{ .Content }}
+<div class="grid">{{ range .Pages }}{{ partial "card.html" . }}{{ end }}</div>
+{{ else }}
+<article class="post">
+  <h1>{{ .Title }}</h1>
+  <div class="content">{{ .Content }}</div>
+  {{ with .Pages.ByWeight }}
+  <div class="subpages">
+    {{ range . }}
+    <a class="subpage" href="{{ .RelPermalink }}"><strong>{{ .Title }}</strong>{{ with .Description }}<span>{{ . }}</span>{{ end }}</a>
+    {{ end }}
+  </div>
+  {{ end }}
+</article>
+{{ end }}
 {{ end }}

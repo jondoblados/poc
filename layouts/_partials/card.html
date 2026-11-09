@@ -1,1 +1,10 @@
-<article class="card"><a href="{{ .RelPermalink }}"><div class="card-media">{{ with partial "cover.html" . }}<img src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="" loading="lazy">{{ end }}</div><div class="card-body"><div class="card-meta">{{ range .Params.categories }}<span class="tag">{{ . }}</span>{{ end }}<span>{{ .Date.Format "2 Jan 2006" }}</span></div><h3>{{ .Title }}</h3><p>{{ .Description }}</p><span class="card-more">Read more →</span></div></a></article>
+<article class="card">
+  <a href="{{ .RelPermalink }}">
+    {{ with partial "cover.html" . }}{{ $thumb := .Fit "800x800 webp" }}<img src="{{ $thumb.RelPermalink }}" width="{{ $thumb.Width }}" height="{{ $thumb.Height }}" alt="" loading="lazy">{{ end }}
+    <div class="card-body">
+      <p class="meta">{{ range .Params.categories }}<span class="tag">{{ . }}</span>{{ end }} {{ .Date.Format "2 Jan 2006" }}</p>
+      <h3>{{ .Title }}</h3>
+      <p>{{ .Description }}</p>
+    </div>
+  </a>
+</article>

@@ -1,23 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>{{ partial "head.html" . }}<script>document.documentElement.classList.add('js');</script><script src="{{ "theme.js" | relURL }}" defer></script></head>
+<head>{{ partial "head.html" . }}</head>
 <body>
-<a class="skip" href="#main">Skip to content</a>
-<header class="site-header"><div class="container">
-  <a class="brand" href="{{ "" | relURL }}" aria-label="AMBSAAS home"><img src="{{ "brand/logo.png" | relURL }}" width="136" height="100" alt="Manchester Business School Alumni Association of Singapore"><span class="poc-badge">POC1</span></a>
-  <button type="button" class="hugo-menu-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
-  <nav id="site-nav" class="site-nav" aria-label="Main navigation"><ul class="menu">
-    <li><a href="{{ "" | relURL }}"{{ if .IsHome }} aria-current="page"{{ end }}>Home</a></li>
-    {{ $current := . }}{{ range site.Menus.main }}
-      {{ if ne .Identifier "home" }}<li{{ if .HasChildren }} class="has-sub"{{ end }}><a href="{{ .URL }}"{{ if or ($current.IsMenuCurrent "main" .) ($current.HasMenuCurrent "main" .) }} aria-current="page"{{ end }}>{{ .Name }}{{ if .HasChildren }} <span aria-hidden="true">⌄</span>{{ end }}</a>
-      {{ if .HasChildren }}<ul class="sub">{{ range .Children }}<li><a href="{{ .URL }}"{{ if $current.IsMenuCurrent "main" . }} aria-current="page"{{ end }}>{{ .Name }}</a></li>{{ end }}</ul>{{ end }}</li>{{ end }}
-    {{ end }}
-  </ul></nav>
-</div></header>
-<main id="main">{{ block "main" . }}{{ end }}</main>
-<footer class="site-footer">{{ partial "wave.html" . }}<div class="container"><div class="footer-grid">
-  <div class="footer-logo"><img src="{{ "brand/logo-footer.png" | relURL }}" width="297" height="219" alt="AMBSAAS" loading="lazy"></div>
-  <ul class="footer-menu"><li><a href="{{ "" | relURL }}">Home</a></li>{{ range site.Menus.main }}<li><a href="{{ .URL }}">{{ .Name }}</a></li>{{ end }}</ul>
-  <div class="footer-contact"><p><a class="email" href="mailto:honsec.mbsaas@gmail.com">honsec.mbsaas@gmail.com</a></p><p class="gold">Questions? Drop us a line!</p><div class="social"><a href="https://www.linkedin.com/company/mbsaas/" rel="noopener" aria-label="AMBSAAS on LinkedIn">in</a><a href="https://www.facebook.com/MBSAPACAlumni" rel="noopener" aria-label="AMBSAAS on Facebook">f</a></div></div>
-</div><div class="footer-bottom"><span class="copy">All rights reserved © AMBSAAS {{ now.Year }}</span><span class="poc">POC1: written in Google Docs, built with Hugo. <a href="{{ "index.xml" | relURL }}">RSS</a> · <a href="https://jon.doblados.net/ambsaas/">Next.js POC</a></span></div></div></footer>
-</body></html>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="{{ "" | relURL }}">AMBSAAS <span>POC</span></a>
+      <nav aria-label="Main">
+        <ul class="menu">
+        {{- $current := . }}
+        {{- range site.Menus.main }}
+          {{- if .HasChildren }}
+          <li class="has-sub"><a href="{{ .URL }}"{{ if or ($current.IsMenuCurrent "main" .) ($current.HasMenuCurrent "main" .) }} aria-current="page"{{ end }}>{{ .Name }}</a>
+            <ul class="sub">{{ range .Children }}<li><a href="{{ .URL }}">{{ .Name }}</a></li>{{ end }}</ul>
+          </li>
+          {{- else }}
+          <li><a href="{{ .URL }}"{{ if $current.IsMenuCurrent "main" . }} aria-current="page"{{ end }}>{{ .Name }}</a></li>
+          {{- end }}
+        {{- end }}
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main class="wrap">{{ block "main" . }}{{ end }}</main>
+  <footer class="wrap site-footer">
+    <p>Content is written in Google Docs and published automatically with GitHub Actions + Hugo. <a href="{{ "index.xml" | relURL }}">RSS</a></p>
+  </footer>
+</body>
+</html>
