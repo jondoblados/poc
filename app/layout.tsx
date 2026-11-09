@@ -3,6 +3,7 @@ import { Nunito_Sans, Open_Sans } from "next/font/google";
 import Link from "next/link";
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
+import TeamCarousel from "./components/TeamCarousel";
 import { BASE, getMenu, SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/lib/content";
 import "./globals.css";
 
@@ -35,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Nav items={menu} />
           </div>
         </header>
-        <main id="main">{children}</main>
+        <main id="main">{children}<TeamCarousel /></main>
         <Footer items={menu} />
       </body>
     </html>
